@@ -1,3 +1,5 @@
+package com.example.linearalgebrasolver;
+
 import org.ejml.simple.SimpleMatrix;
 public class EJMMatrixOperations {
     // Gaussian Elimination (Solving Ax = B)
