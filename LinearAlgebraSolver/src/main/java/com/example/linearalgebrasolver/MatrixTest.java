@@ -18,20 +18,20 @@ public class MatrixTest {
         };
 
         // Constants matrix B (3x1 matrix)
-        double[][] arrayB = {{-28}, {5}, {-26}};
+        double[] arrayB = {-28, -18, -26};
 
         // Convert arrays to SimpleMatrix
-        SimpleMatrix a = new SimpleMatrix(arrayA);
-        SimpleMatrix b = new SimpleMatrix(arrayB);
+        //SimpleMatrix a = new SimpleMatrix(arrayA);
+        //SimpleMatrix b = new SimpleMatrix(arrayB); // this take as argument double[][]
 
-        System.out.println(a.solve(b));
+       // System.out.println(a.solve(b));
 
 
 
         // Solve the system of equations A * x = B
-       // SimpleMatrix result = EJMMatrixOperations.gaussianElimination(arrayA, arrayB);
-       // System.out.println("Result (Solution vector x): \n" + result);
-        System.out.println(EJMMatrixOperations.det(a));
+       SimpleMatrix result = EJMMatrixOperations.gaussianElimination(arrayA, arrayB); // this take double[]
+        System.out.println("Result (Solution vector x): \n" + result); // works both cases
+       // System.out.println(EJMMatrixOperations.det(a));
 
     }
 
