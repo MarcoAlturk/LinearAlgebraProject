@@ -1,5 +1,4 @@
 ![License Badge](https://img.shields.io/badge/License-MIT-blue.svg)
-![Build Status Badge](https://img.shields.io/travis/username/repository-name.svg)
 ![Version Badge](https://img.shields.io/badge/version-v1.0.0-green.svg)
 
 # Linear Algebra Solver
