@@ -62,95 +62,58 @@ public class EJMMatrixOperations {
     }
 
 
+    private static final double EPSILON = 1e-10;
 
-
-
-
-
-
-
-
-
-
-    // Method to print a matrix
-    public static void printMatrix(SimpleMatrix matrix) {
-        matrix.print();  // SimpleMatrix has a built-in print() method
-    }
-
-    // Method to swap two rows in a matrix
-    public static void swapRows(SimpleMatrix matrix, int row1, int row2) {
-        for (int col = 0; col < matrix.numCols(); col++) {
-            double temp = matrix.get(row1, col);
-            matrix.set(row1, col, matrix.get(row2, col));
-            matrix.set(row2, col, temp);
-        }
-    }
-
-    // Method to perform Gaussian Elimination (A * x = B)
-    public static SimpleMatrix gaussianElimination(SimpleMatrix A, SimpleMatrix B) {
-        int rows = A.numRows();
-        int cols = A.numCols();
-
-        // Combine A and B into an augmented matrix (A | B)
-        SimpleMatrix augmentedMatrix = new SimpleMatrix(rows, cols + 1);
-        augmentedMatrix.insertIntoThis(0, 0, A); // Insert A into augmented matrix
-        augmentedMatrix.insertIntoThis(0, cols, B); // Insert B into augmented matrix
-
-        System.out.println("Initial augmented matrix:");
-        printMatrix(augmentedMatrix);
+    // Gaussian elimination with partial pivoting
+    public static SimpleMatrix gaussianElimination(double[][] A, double[] b) {
+        int n = b.length;
 
         // Perform Gaussian elimination
-        for (int i = 0; i < rows; i++) {
-            // Pivoting: Find the maximum element in column i
-            int maxRow = i;
-            for (int j = i + 1; j < rows; j++) {
-                if (Math.abs(augmentedMatrix.get(j, i)) > Math.abs(augmentedMatrix.get(maxRow, i))) {
-                    maxRow = j;
+        for (int p = 0; p < n; p++) {
+
+            // Find pivot row and swap
+            int max = p;
+            for (int i = p + 1; i < n; i++) {
+                if (Math.abs(A[i][p]) > Math.abs(A[max][p])) {
+                    max = i;
                 }
             }
+            // Swap rows in A
+            double[] temp = A[p]; A[p] = A[max]; A[max] = temp;
+            // Swap rows in b
+            double t = b[p]; b[p] = b[max]; b[max] = t;
 
-            // Swap rows if necessary
-            if (maxRow != i) {
-                swapRows(augmentedMatrix, i, maxRow); // Swap the rows manually
-                System.out.println("After row swap " + i + " with row " + maxRow + ":");
-                printMatrix(augmentedMatrix); // Prints the updated augmented matrix after the swap
+            // Check for singular or nearly singular matrix
+            if (Math.abs(A[p][p]) <= EPSILON) {
+                throw new ArithmeticException("Matrix is singular or nearly singular");
             }
 
-            // Normalize the pivot row by dividing all elements by the pivot
-            double pivot = augmentedMatrix.get(i, i);
-            for (int j = i; j < cols + 1; j++) {
-                augmentedMatrix.set(i, j, augmentedMatrix.get(i, j) / pivot);
-            }
-            System.out.println("After normalizing row " + i + ":");
-            printMatrix(augmentedMatrix);
-
-            // Eliminate below the pivot
-            for (int j = i + 1; j < rows; j++) {
-                double factor = augmentedMatrix.get(j, i);
-                for (int k = i; k < cols + 1; k++) {
-                    augmentedMatrix.set(j, k, augmentedMatrix.get(j, k) - factor * augmentedMatrix.get(i, k));
+            // Pivot within A and b
+            for (int i = p + 1; i < n; i++) {
+                double alpha = A[i][p] / A[p][p];
+                b[i] -= alpha * b[p];
+                for (int j = p; j < n; j++) {
+                    A[i][j] -= alpha * A[p][j];
                 }
             }
-            System.out.println("After eliminating column " + i + ":");
-            printMatrix(augmentedMatrix);
         }
 
-        // Back substitution to get the solution
-        for (int i = rows - 1; i >= 0; i--) {
-            for (int j = i - 1; j >= 0; j--) {
-                double factor = augmentedMatrix.get(j, i);
-                augmentedMatrix.set(j, cols, augmentedMatrix.get(j, cols) - factor * augmentedMatrix.get(i, cols));
+        // Back substitution
+        double[] x = new double[n];
+        for (int i = n - 1; i >= 0; i--) {
+            double sum = 0.0;
+            for (int j = i + 1; j < n; j++) {
+                sum += A[i][j] * x[j];
             }
-        }
-        System.out.println("After back substitution:");
-        printMatrix(augmentedMatrix);
-
-        // Extract the solution vector from the augmented matrix
-        SimpleMatrix solution = new SimpleMatrix(rows, 1);
-        for (int i = 0; i < rows; i++) {
-            solution.set(i, 0, augmentedMatrix.get(i, cols));
+            x[i] = (b[i] - sum) / A[i][i];
         }
 
-        return solution;
+        // Return the solution as a SimpleMatrix
+        SimpleMatrix result = new SimpleMatrix(n, 1);
+        for (int i = 0; i < n; i++) {
+            result.set(i, 0, x[i]);
+        }
+
+        return result;
     }
 }
