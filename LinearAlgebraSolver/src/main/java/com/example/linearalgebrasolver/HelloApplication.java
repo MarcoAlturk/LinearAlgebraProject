@@ -91,6 +91,33 @@ public class HelloApplication extends Application {
         Label colsLabel = new Label("Number of Columns:");
         Spinner<Integer> colsSpinner = new Spinner<>(1, 10, 1);
 
+        VBox vbox1 = new VBox(15, rowsLabel, colsLabel);
+        VBox vbox2 = new VBox(15, rowsSpinner, colsSpinner);
+
+        CheckBox augmentedMatrixCheckBox = new CheckBox("Augmented Matrix");
+        augmentedMatrixCheckBox.setStyle("-fx-font-size: 12px;");
+
+        vbox1.setAlignment(Pos.CENTER);
+        vbox2.setAlignment(Pos.CENTER);
+
+        HBox hbox1=  new HBox(15, vbox1, vbox2);
+        VBox vbox3 = new VBox(15, hbox1, augmentedMatrixCheckBox);
+        vbox3.setAlignment(Pos.CENTER);
+
+
+        augmentedMatrixCheckBox.selectedProperty().addListener(e -> {
+            if (augmentedMatrixCheckBox.isSelected() && colsSpinner.getValue() < 2) {
+                colsSpinner.getValueFactory().setValue(2);
+            }
+        });
+
+        colsSpinner.valueProperty().addListener(e -> {
+            if (augmentedMatrixCheckBox.isSelected() && colsSpinner.getValue() < 2) {
+                colsSpinner.getValueFactory().setValue(2);
+            }
+        });
+
+
         GridPane matrixGrid = new GridPane();
         matrixGrid.setHgap(10);
         matrixGrid.setVgap(10);
@@ -100,8 +127,7 @@ public class HelloApplication extends Application {
         generateButton.setOnAction(e -> generateMatrix(rowsSpinner.getValue(), colsSpinner.getValue(), matrixGrid));
 
         VBox layout = new VBox(15,
-                new HBox(10, rowsLabel, rowsSpinner),
-                new HBox(10, colsLabel, colsSpinner),
+                vbox3,
                 generateButton,
                 matrixGrid);
         layout.setAlignment(Pos.CENTER);
@@ -126,10 +152,11 @@ public class HelloApplication extends Application {
 
                 // Restrict input to numbers only
                 textField.textProperty().addListener((observable, oldValue, newValue) -> {
-                    if (!newValue.matches("-?\\d*(\\.\\d*)?")) {
+                    if (!newValue.matches("-?\\d*")) {
                         textField.setText(oldValue);
                     }
                 });
+
 
                 matrixGrid.add(textField, col, row); // Add to GridPane at (col, row)
             }
