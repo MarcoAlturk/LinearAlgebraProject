@@ -1,6 +1,7 @@
 package com.example.linearalgebrasolver;
 
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -10,12 +11,36 @@ import javafx.scene.layout.VBox;
 
 public class BuilMatrixOperations {
 
-    public  VBox buildLayoutForOperations(){
+  //  public  VBox buildLayoutForOperations(){
 
 
-        VBox vBoxRoot = createMatrixControl("A");
-        return vBoxRoot;
+       // VBox vBoxRoot = createMatrixControl("A");
+       // return vBoxRoot;
 
+    //} private
+    int matrixCount = 0; // To track created matrices (A, B, C, D)
+
+    public HBox buildLayoutForMatrixWithCreateButton() {
+        HBox layout = new HBox(10);
+        layout.setAlignment(Pos.CENTER);
+
+        Button createMatrixButton = new Button("Create New Matrix");
+        createMatrixButton.setOnAction(e -> createNewMatrix(layout));
+
+        layout.getChildren().add(createMatrixButton);
+        return layout;
+    }
+
+    private void createNewMatrix(HBox layout) {
+        if (matrixCount < 4) { // Limit to 4 matrices
+            char matrixName = (char) ('A' + matrixCount); // Determine the next matrix letter
+            VBox newMatrix = createMatrixControl(String.valueOf(matrixName));
+            layout.getChildren().add(newMatrix);
+            matrixCount++;
+        } else {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Maximum of 4 matrices created.");
+            alert.showAndWait();
+        }
     }
     private VBox createMatrixControl(String matrixName) {
         Label titleLabel = new Label(matrixName);
