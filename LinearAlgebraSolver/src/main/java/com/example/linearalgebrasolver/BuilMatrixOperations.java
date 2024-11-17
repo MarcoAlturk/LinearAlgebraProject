@@ -17,8 +17,8 @@ import java.util.List;
 
 public class BuilMatrixOperations {
     int matrixCount = 0; // To track created matrices (A, B, C, D)
-    List<SimpleMatrix> matrices = new ArrayList<>(); // Store matrices for determinant calculation
-    GridPane gridPaneValues = new GridPane(); // Grid to display determinants
+    //List<SimpleMatrix> matrices = new ArrayList<>(); // Store matrices for determinant calculation
+
 
     public HBox buildLayoutForMatrixWithCreateButton() {
         HBox layout = new HBox(10);
@@ -37,8 +37,6 @@ public class BuilMatrixOperations {
             char matrixName = (char) ('A' + matrixCount); // Determine the next matrix letter
             VBox newMatrix = createMatrixControl(String.valueOf(matrixName));
 
-            // Add a default 2x2 identity matrix as a placeholder
-            matrices.add(new SimpleMatrix(2, 2));
             layout.getChildren().add(newMatrix);
             matrixCount++;
         } else {
@@ -123,32 +121,7 @@ public class BuilMatrixOperations {
             grid.add(cell, col, rows); // Add to the next row
         }
 
-        // Update the corresponding SimpleMatrix
-        int index = getMatrixIndexForGrid(grid);
-        if (index != -1) {
-            SimpleMatrix matrix = matrices.get(index);
-
-            // Create a new matrix with one more row and the same number of columns
-            SimpleMatrix newMatrix = new SimpleMatrix(matrix.numRows() + 1, matrix.numCols());
-
-            // Copy existing values to the new matrix
-            for (int i = 0; i < matrix.numRows(); i++) {
-                for (int j = 0; j < matrix.numCols(); j++) {
-                    newMatrix.set(i, j, matrix.get(i, j)); // Copy existing values
-                }
-            }
-
-            // Optionally, you can fill the new row with 0 (or any default value)
-            for (int j = 0; j < matrix.numCols(); j++) {
-                newMatrix.set(matrix.numRows(), j, 0); // New row filled with 0
-            }
-
-            matrices.set(index, newMatrix); // Update the matrix list
-        }
     }
-
-
-
 
 
     // Remove the last row
@@ -173,33 +146,8 @@ public class BuilMatrixOperations {
         }
 
         // Update the corresponding SimpleMatrix
-        int index = getMatrixIndexForGrid(grid);
-        if (index != -1) {
-            SimpleMatrix matrix = matrices.get(index);
 
-            // Create a new matrix with the same number of rows and one more column
-            SimpleMatrix newMatrix = new SimpleMatrix(matrix.numRows(), matrix.numCols() + 1);
-
-            // Copy existing values to the new matrix
-            for (int i = 0; i < matrix.numRows(); i++) {
-                for (int j = 0; j < matrix.numCols(); j++) {
-                    newMatrix.set(i, j, matrix.get(i, j)); // Copy existing values
-                }
-            }
-
-            // Optionally, you can fill the new column with 0 (or any default value)
-            for (int i = 0; i < matrix.numRows(); i++) {
-                newMatrix.set(i, matrix.numCols(), 0); // New column filled with 0
-            }
-
-            matrices.set(index, newMatrix); // Update the matrix list
-        }
     }
-
-
-
-
-
 
 
     // Remove the last column
@@ -209,28 +157,22 @@ public class BuilMatrixOperations {
             // Remove the last column from the grid
             grid.getChildren().removeIf(node -> GridPane.getColumnIndex(node) == cols - 1);
 
-            // Update the corresponding SimpleMatrix
-            int index = getMatrixIndexForGrid(grid);
-            if (index != -1) {
-                SimpleMatrix matrix = matrices.get(index);
-                matrix = matrix.extractMatrix(0, matrix.numRows(), 0, matrix.numCols() - 1); // Remove last column
-                matrices.set(index, matrix); // Update the matrix list
-            }
         }
     }
 
-    private int getMatrixIndexForGrid(GridPane grid) {
+    //private int getMatrixIndexForGrid(GridPane grid) {
         // Iterate over the matrices and check which one corresponds to the given grid
-        for (int i = 0; i < matrices.size(); i++) {
-            SimpleMatrix matrix = matrices.get(i);
+       // for (int i = 0; i < matrices.size(); i++) {
+          ///  SimpleMatrix matrix = matrices.get(i);
 
             // Check if this matrix corresponds to the grid by matching the number of rows and columns
-            if (matrix.numRows() == grid.getRowCount() && matrix.numCols() == grid.getColumnCount()) {
-                return i; // Return the index if the dimensions match
-            }
-        }
-        return -1; // Return -1 if no matching matrix found
-    }
+           // if (matrix.numRows() == grid.getRowCount() && matrix.numCols() == grid.getColumnCount()) {
+                //return i; // Return the index if the dimensions match
+           // }
+        //}
+       // return -1; // Return -1 if no matching matrix found
+    //}
+
     private void restrictToNumbers(TextField textField) {
         textField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.matches("-?\\d*(\\.\\d*)?")) { // Allow numbers with optional negative sign and decimal
@@ -240,48 +182,7 @@ public class BuilMatrixOperations {
                 int col = GridPane.getColumnIndex(textField);
                 GridPane parentGrid = (GridPane) textField.getParent();
 
-                // Update SimpleMatrix
-                int index = getMatrixIndexForGrid(parentGrid);
-                if (index != -1) {
-                    SimpleMatrix matrix = matrices.get(index);
-                    double value = newValue.isEmpty() ? 0 : Double.parseDouble(newValue);
-                    matrix.set(row, col, value);
-                }
             }
         });
-    }
-
-
-    public GridPane gridPaneButtons() {
-        Button buttonDet = new Button("Determinants");
-        buttonDet.setStyle("-fx-font-family: cursive; -fx-font-weight: bolder");
-
-        // Action to calculate and display determinants
-        buttonDet.setOnAction(e -> displayDeterminants());
-
-        GridPane gridPane = new GridPane();
-        gridPane.add(buttonDet, 0, 0);
-        return gridPane;
-    }
-
-    public VBox containerForButtonsAndOutput() {
-        VBox vBox = new VBox(10);
-        vBox.setAlignment(Pos.CENTER);
-        vBox.getChildren().addAll(gridPaneButtons(), gridPaneValues);
-        return vBox;
-    }
-
-    private void displayDeterminants() {
-        gridPaneValues.getChildren().clear();
-        for (int i = 0; i < matrices.size(); i++) {
-            SimpleMatrix matrix = matrices.get(i);
-            double determinant = matrix.determinant();
-
-            Label detLabel = new Label("det(" + (char) ('A' + i) + "): ");
-            Label detValue = new Label(String.format("%.2f", determinant));
-
-            gridPaneValues.add(detLabel, 0, i);
-            gridPaneValues.add(detValue, 1, i);
-        }
     }
 }
