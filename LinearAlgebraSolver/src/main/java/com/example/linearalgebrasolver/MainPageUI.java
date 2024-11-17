@@ -3,6 +3,7 @@ package com.example.linearalgebrasolver;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 public class MainPageUI {
@@ -41,7 +42,11 @@ public class MainPageUI {
     }
 
     public static  void matrixOperations(TabPane tabPane){
+        BuilMatrixOperations builMatrixOperations  = new BuilMatrixOperations();
         Tab tabMatrixOperations = new Tab("Matrix Operations");
+        HBox hBoxContents = new HBox(10,builMatrixOperations.buildLayoutForOperations(), builMatrixOperations.buildLayoutForOperations());
+        tabMatrixOperations.setContent(hBoxContents);
+
         tabMatrixOperations.setClosable(false);
         tabPane.getTabs().add(tabMatrixOperations);
     }
