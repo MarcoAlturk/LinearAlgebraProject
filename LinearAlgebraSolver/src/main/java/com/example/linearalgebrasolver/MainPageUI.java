@@ -11,8 +11,8 @@ public class MainPageUI {
 
         TabPane tabPane = new TabPane();
 
-        tabPane.getTabs().add(new Tab("Matrix Operations"));
-        tabPane.getTabs().add(new Tab("Planes and lines D"));
+        matrixOperations(tabPane);
+
 
         pointsOptions(tabPane);
 
@@ -38,5 +38,11 @@ public class MainPageUI {
         layout.getChildren().addAll(selectLabel, distanceTypeCombo);
         distanceTab.setContent(layout);
         tabPane.getTabs().add(distanceTab);
+    }
+
+    public static  void matrixOperations(TabPane tabPane){
+        Tab tabMatrixOperations = new Tab("Matrix Operations");
+        tabMatrixOperations.setClosable(false);
+        tabPane.getTabs().add(tabMatrixOperations);
     }
 }
