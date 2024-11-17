@@ -10,6 +10,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.util.converter.IntegerStringConverter;
 import org.ejml.simple.SimpleMatrix;
 
 import java.io.IOException;
@@ -85,12 +86,10 @@ public class HelloApplication extends Application {
 
         // Layout components
         Label rowsLabel = new Label("Number of Rows:");
-        Spinner<Integer> rowsSpinner = new Spinner<>(1, 10, 2); // Min: 1, Max: 10, Default: 2
-        rowsSpinner.setEditable(true);
+        Spinner<Integer> rowsSpinner = new Spinner<>(1, 10, 1);
 
         Label colsLabel = new Label("Number of Columns:");
-        Spinner<Integer> colsSpinner = new Spinner<>(1, 10, 2); // Min: 1, Max: 10, Default: 2
-        colsSpinner.setEditable(true);
+        Spinner<Integer> colsSpinner = new Spinner<>(1, 10, 1);
 
         GridPane matrixGrid = new GridPane();
         matrixGrid.setHgap(10);
@@ -134,10 +133,9 @@ public class HelloApplication extends Application {
 
                 matrixGrid.add(textField, col, row); // Add to GridPane at (col, row)
             }
+
         }
     }
-
-
 
 
     public static void main(String[] args) {
