@@ -49,7 +49,9 @@ public class MainPageUI {
         //tabMatrixOperations.setContent(hBoxContents);
         HBox  layoutWithCreateButton = new  HBox(builMatrixOperations.buildLayoutForMatrixWithCreateButton());
         layoutWithCreateButton.setAlignment(Pos.CENTER);
-        tabMatrixOperations.setContent(layoutWithCreateButton);
+
+        VBox vBoxCurrentRootForTabs = new VBox(layoutWithCreateButton);
+        tabMatrixOperations.setContent(vBoxCurrentRootForTabs);
 
         tabMatrixOperations.setClosable(false);
         tabPane.getTabs().add(tabMatrixOperations);
