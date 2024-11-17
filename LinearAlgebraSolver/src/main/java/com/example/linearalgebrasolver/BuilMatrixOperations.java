@@ -25,6 +25,7 @@ public class BuilMatrixOperations {
         layout.setAlignment(Pos.CENTER);
 
         Button createMatrixButton = new Button("Create New Matrix");
+        createMatrixButton.setStyle("-fx-background-color: #3C99DC; -fx-text-fill: black; -fx-font-weight: bolder");
         createMatrixButton.setOnAction(e -> createNewMatrix(layout));
 
         layout.getChildren().add(createMatrixButton);
@@ -44,7 +45,7 @@ public class BuilMatrixOperations {
     }
     private VBox createMatrixControl(String matrixName) {
         Label titleLabel = new Label(matrixName);
-        titleLabel.setStyle("-fx-font-size: 16; -fx-font-weight: bold;");
+        titleLabel.setStyle("-fx-font-size: 16; -fx-font-weight: bolder; -fx-font-family: SansSerif");
 
         GridPane matrixGrid = new GridPane();
         matrixGrid.setGridLinesVisible(true); // To visualize the matrix cells
@@ -62,9 +63,13 @@ public class BuilMatrixOperations {
         HBox controlsRows = new HBox(2);
         HBox controlsColumns = new HBox(2);
         Button addRowBtn = new Button("+ Row");
+        addRowBtn.setStyle("-fx-font-family: Arial; -fx-font-weight: bolder");
         Button removeRowBtn = new Button("- Row");
+        removeRowBtn.setStyle("-fx-font-family: Arial; -fx-font-weight: bolder");
         Button addColBtn = new Button("+ Column");
+        addColBtn.setStyle("-fx-font-family: Arial; -fx-font-weight: bolder");
         Button removeColBtn = new Button("- Column");
+        removeColBtn.setStyle("-fx-font-family: Arial; -fx-font-weight: bolder");
 
         controlsRows.setAlignment(Pos.CENTER);
         controlsRows.getChildren().addAll(addRowBtn, removeRowBtn);
