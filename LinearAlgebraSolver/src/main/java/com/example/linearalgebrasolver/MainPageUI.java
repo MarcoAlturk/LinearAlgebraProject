@@ -1,6 +1,7 @@
 package com.example.linearalgebrasolver;
 
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
@@ -44,10 +45,14 @@ public class MainPageUI {
     public static  void matrixOperations(TabPane tabPane){
         BuilMatrixOperations builMatrixOperations  = new BuilMatrixOperations();
         Tab tabMatrixOperations = new Tab("Matrix Operations");
-        HBox hBoxContents = new HBox(10,builMatrixOperations.buildLayoutForOperations(), builMatrixOperations.buildLayoutForOperations());
-        tabMatrixOperations.setContent(hBoxContents);
+        //HBox hBoxContents = new HBox(10,builMatrixOperations.buildLayoutForOperations(), builMatrixOperations.buildLayoutForOperations());
+        //tabMatrixOperations.setContent(hBoxContents);
+        HBox  layoutWithCreateButton = new  HBox(builMatrixOperations.buildLayoutForMatrixWithCreateButton());
+        layoutWithCreateButton.setAlignment(Pos.CENTER);
+        tabMatrixOperations.setContent(layoutWithCreateButton);
 
         tabMatrixOperations.setClosable(false);
         tabPane.getTabs().add(tabMatrixOperations);
     }
+
 }
