@@ -5,10 +5,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -29,7 +27,7 @@ public class HelloApplication extends Application {
         // Buttons for different operations
         Button rrefButton = new Button("RREF Solver");
         Button multiplicationButton = new Button("Matrix Multiplication");
-        Button vectorAdditionButton = new Button("Vector Addition");
+        Button vectorAdditionButton = new Button("Matrix Addition");
         Button scalarMultiplicationButton = new Button("Scalar Multiplication");
         Button planePointDistanceButton = new Button("Plane to Point Distance");
         Button planePlaneDistanceButton = new Button("Plane to Plane Distance");
@@ -65,7 +63,7 @@ public class HelloApplication extends Application {
         mainLayout.setStyle("-fx-background-color: #ffffff;");
 
         // Add event handlers for each button (example placeholders)
-        rrefButton.setOnAction(e -> System.out.println("RREF Solver clicked"));
+        rrefButton.setOnAction(e -> openRrefWindow());
         multiplicationButton.setOnAction(e -> System.out.println("Matrix Multiplication clicked"));
         vectorAdditionButton.setOnAction(e -> System.out.println("Vector Addition clicked"));
         scalarMultiplicationButton.setOnAction(e -> System.out.println("Scalar Multiplication clicked"));
@@ -78,6 +76,65 @@ public class HelloApplication extends Application {
         Scene scene = new Scene(mainLayout, 600, 400);
         primaryStage.setScene(scene);
         primaryStage.show();
+    }
+
+    private void openRrefWindow() {
+        // Create a new stage
+        Stage rrefStage = new Stage();
+        rrefStage.setTitle("RREF Solver");
+
+        // Layout components
+        Label rowsLabel = new Label("Number of Rows:");
+        Spinner<Integer> rowsSpinner = new Spinner<>(1, 10, 2); // Min: 1, Max: 10, Default: 2
+        rowsSpinner.setEditable(true);
+
+        Label colsLabel = new Label("Number of Columns:");
+        Spinner<Integer> colsSpinner = new Spinner<>(1, 10, 2); // Min: 1, Max: 10, Default: 2
+        colsSpinner.setEditable(true);
+
+        GridPane matrixGrid = new GridPane();
+        matrixGrid.setHgap(10);
+        matrixGrid.setVgap(10);
+        matrixGrid.setAlignment(Pos.CENTER);
+
+        Button generateButton = new Button("Generate Matrix");
+        generateButton.setOnAction(e -> generateMatrix(rowsSpinner.getValue(), colsSpinner.getValue(), matrixGrid));
+
+        VBox layout = new VBox(15,
+                new HBox(10, rowsLabel, rowsSpinner),
+                new HBox(10, colsLabel, colsSpinner),
+                generateButton,
+                matrixGrid);
+        layout.setAlignment(Pos.CENTER);
+        layout.setPadding(new Insets(20));
+
+        // Set up the scene and stage
+        Scene scene = new Scene(layout, 400, 500);
+        rrefStage.setScene(scene);
+        rrefStage.show();
+    }
+
+    private void generateMatrix(int rows, int cols, GridPane matrixGrid) {
+        // Clear existing text fields
+        matrixGrid.getChildren().clear();
+
+        // Create the matrix of text fields
+        for (int row = 0; row < rows; row++) {
+            for (int col = 0; col < cols; col++) {
+                TextField textField = new TextField();
+                textField.setPromptText("0");
+                textField.setPrefWidth(50);
+
+                // Restrict input to numbers only
+                textField.textProperty().addListener((observable, oldValue, newValue) -> {
+                    if (!newValue.matches("-?\\d*(\\.\\d*)?")) {
+                        textField.setText(oldValue);
+                    }
+                });
+
+                matrixGrid.add(textField, col, row); // Add to GridPane at (col, row)
+            }
+        }
     }
 
 
