@@ -70,6 +70,7 @@ public class BuilMatrixOperations {
             for (int col = 0; col < cols; col++) {
                 TextField cell = new TextField("0");
                 cell.setPrefSize(40, 40);
+                restrictToNumbers(cell);
                 grid.add(cell, col, row);
             }
         }
@@ -111,5 +112,12 @@ public class BuilMatrixOperations {
         if (cols > 1) { // Keep at least one column
             grid.getChildren().removeIf(node -> GridPane.getColumnIndex(node) == cols - 1);
         }
+    }
+    private void restrictToNumbers(TextField textField) {
+        textField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) { // Allow only digits
+                textField.setText(oldValue); // Revert to the previous valid value
+            }
+        });
     }
 }
