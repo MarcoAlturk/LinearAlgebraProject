@@ -14,7 +14,7 @@ public class MatrixTest {
         double[][] arrayA = {
                 {4, -4, 3},
                 {-5, -6, 4},
-                {6, 5, 6}
+                {0, 0, 0}
         };
 
         // Constants matrix B (3x1 matrix)
