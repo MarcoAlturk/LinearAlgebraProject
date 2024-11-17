@@ -14,14 +14,13 @@ public class MainPageUI {
         tabPane.getTabs().add(new Tab("Matrix Operations"));
         tabPane.getTabs().add(new Tab("Planes and lines D"));
 
-
-
+        pointsOptions(tabPane);
 
 
         Scene scene = new Scene(tabPane);
         return scene;
     }
-    public void pointsOptions(TabPane tabPane){
+    public static void pointsOptions(TabPane tabPane){
         Tab distanceTab = new Tab("Distance Calculations");
         distanceTab.setClosable(false);
 
