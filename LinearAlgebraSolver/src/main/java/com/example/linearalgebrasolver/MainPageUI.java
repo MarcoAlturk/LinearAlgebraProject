@@ -7,6 +7,14 @@ import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.geometry.Point3D;
+import javafx.scene.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.PhongMaterial;
+import javafx.scene.shape.*;
+import javafx.stage.Stage;
 
 public class MainPageUI {
 
@@ -69,6 +77,11 @@ public class MainPageUI {
         TextField fieldC = createNumericField("C");
         TextField fieldD = createNumericField("D");
 
+        fieldA.setAlignment(Pos.CENTER_RIGHT);
+        fieldB.setAlignment(Pos.CENTER_RIGHT);
+        fieldC.setAlignment(Pos.CENTER_RIGHT);
+        fieldD.setAlignment(Pos.CENTER_RIGHT);
+
         HBox planeInputs = new HBox(5, fieldA, new Label("x +"), fieldB, new Label("y +"),
                 fieldC, new Label("z +"), fieldD, new Label("= 0"));
         planeInputs.setAlignment(Pos.CENTER);
@@ -99,6 +112,11 @@ public class MainPageUI {
             double numerator = Math.abs(A * x + B * y + C * z + D);
             double denominator = Math.sqrt(A * A + B * B + C * C);
             double distance = numerator / denominator;
+
+            DistanceVisualizer visualizer = new DistanceVisualizer();
+            Stage visualizerStage = visualizer.createVisualizer(A, B, C, D, x, y, z, distance);
+            visualizerStage.show();
+
 
             resultLabel.setText(String.format("Distance: %.2f", distance));
         });
