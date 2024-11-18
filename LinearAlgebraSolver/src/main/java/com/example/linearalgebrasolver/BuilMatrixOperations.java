@@ -164,14 +164,20 @@ public class BuilMatrixOperations {
 
     private void restrictToNumbers(TextField textField) {
         textField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.matches("-?\\d*(\\.\\d*)?")) { // Allow numbers with optional negative sign and decimal
-                textField.setText(oldValue);
+            // Allow empty input or a single '-' at the start
+            if (newValue.isEmpty() || newValue.equals("-")) {
+                textField.setText(newValue);  // Keep the dash or empty
+            }
+            // Allow a negative number or a positive number with digits only
+            else if (newValue.matches("-?\\d+")) {
+                textField.setText(newValue);  // Keep digits or negative number
             } else {
-                int row = GridPane.getRowIndex(textField);
-                int col = GridPane.getColumnIndex(textField);
-                GridPane parentGrid = (GridPane) textField.getParent();
-
+                // Revert to the old value if the input is invalid
+                textField.setText(oldValue);
             }
         });
     }
+
+
+
 }
