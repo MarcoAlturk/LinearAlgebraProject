@@ -160,18 +160,7 @@ public class BuilMatrixOperations {
         }
     }
 
-    //private int getMatrixIndexForGrid(GridPane grid) {
-        // Iterate over the matrices and check which one corresponds to the given grid
-       // for (int i = 0; i < matrices.size(); i++) {
-          ///  SimpleMatrix matrix = matrices.get(i);
 
-            // Check if this matrix corresponds to the grid by matching the number of rows and columns
-           // if (matrix.numRows() == grid.getRowCount() && matrix.numCols() == grid.getColumnCount()) {
-                //return i; // Return the index if the dimensions match
-           // }
-        //}
-       // return -1; // Return -1 if no matching matrix found
-    //}
 
     private void restrictToNumbers(TextField textField) {
         textField.textProperty().addListener((observable, oldValue, newValue) -> {
