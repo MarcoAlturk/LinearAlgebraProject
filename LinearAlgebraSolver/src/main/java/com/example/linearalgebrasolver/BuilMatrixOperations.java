@@ -1,5 +1,6 @@
 package com.example.linearalgebrasolver;
 
+import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
@@ -72,6 +73,8 @@ public class BuilMatrixOperations {
         addColBtn.setStyle("-fx-font-family: Arial; -fx-font-weight: bolder");
         Button removeColBtn = new Button("- Column");
         removeColBtn.setStyle("-fx-font-family: Arial; -fx-font-weight: bolder");
+        Button calculateDeterminantBtn = new Button("Calculate Determinant");
+        calculateDeterminantBtn.setStyle("-fx-font-family: Arial; -fx-font-weight: bolder");
 
         controlsRows.setAlignment(Pos.CENTER);
         controlsRows.getChildren().addAll(addRowBtn, removeRowBtn);
@@ -80,6 +83,7 @@ public class BuilMatrixOperations {
         controlsColumns.getChildren().addAll(addColBtn, removeColBtn);
 
         controls.getChildren().addAll(controlsRows, controlsColumns);
+        controls.getChildren().add(calculateDeterminantBtn);
 
 
         // Event handlers
@@ -87,6 +91,7 @@ public class BuilMatrixOperations {
         removeRowBtn.setOnAction(e -> removeRow(matrixGrid));
         addColBtn.setOnAction(e -> addColumn(matrixGrid));
         removeColBtn.setOnAction(e -> removeColumn(matrixGrid));
+        calculateDeterminantBtn.setOnAction(e -> calculateMatrixDeterminant(matrixGrid));
 
         VBox matrixBox = new VBox(10);
         matrixBox.setAlignment(Pos.CENTER);
@@ -178,6 +183,50 @@ public class BuilMatrixOperations {
         });
     }
 
+    public double[][] getMatrixData(GridPane grid) {
+        int rows = grid.getRowCount();
+        int cols = grid.getColumnCount();
+        double[][] matrixData = new double[rows][cols];
 
+
+        for (int row = 0; row < rows; row++) {
+            for (int col = 0; col < cols; col++) {
+                // Get the TextField for the current cell
+                TextField cell = (TextField) getNodeByRowColumnIndex(row, col, grid);
+                try {
+                    // Parse the text in the TextField and assign it to the matrix
+                    matrixData[row][col] = Double.parseDouble(cell.getText());
+                } catch (NumberFormatException e) {
+                    // Handle invalid input (you could show an alert or use a default value)
+                    matrixData[row][col] = 0.0; // You can handle this differently depending on your needs
+                }
+            }
+        }
+        return matrixData;
+    }
+
+
+    private Node getNodeByRowColumnIndex(final int row, final int column, GridPane grid) {
+        Node result = null;
+        ObservableList<Node> children = grid.getChildren();
+        for (Node node : children) {
+            if (GridPane.getRowIndex(node) == row && GridPane.getColumnIndex(node) == column) {
+                result = node;
+                break;
+            }
+        }
+        return result;
+    }
+
+
+    private void calculateMatrixDeterminant(GridPane matrixGrid) {
+        double[][] matrixData = getMatrixData(matrixGrid); // Extract matrix data
+        double determinant = DeterminantCalculator.calculateDeterminant(matrixData); // Call the determinant method
+
+
+        // Display the determinant (you could show it in a Label or alert)
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, "Determinant: " + determinant);
+        alert.showAndWait();
+    }
 
 }
