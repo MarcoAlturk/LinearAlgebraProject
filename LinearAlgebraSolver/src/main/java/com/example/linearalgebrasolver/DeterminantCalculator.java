@@ -24,7 +24,7 @@ public class DeterminantCalculator {
         }
         return determinant;
     }
-
+    //testing stuff
 
     // Helper method to get the minor of a matrix by excluding a row and a column
     private static double[][] getMinor(double[][] matrix, int row, int col) {
