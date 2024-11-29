@@ -1,11 +1,11 @@
 package com.example.linearalgebrasolver;
 
+import javafx.scene.control.Alert;
+
 public class DeterminantCalculator {
     public static double calculateDeterminant(double[][] matrix) {
         // Check if the matrix is square
         int n = matrix.length;
-
-
 
         if (n == 0 || matrix[0].length == 0) {
             throw new IllegalArgumentException("Matrix cannot be empty.");
@@ -34,7 +34,7 @@ public class DeterminantCalculator {
         }
         return determinant;
     }
-
+    //testing stuff
 
     // Helper method to get the minor of a matrix by excluding a row and a column
     public static double[][] getMinor(double[][] matrix, int row, int col) {
