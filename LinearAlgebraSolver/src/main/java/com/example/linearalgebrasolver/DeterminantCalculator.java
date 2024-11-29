@@ -1,12 +1,11 @@
 package com.example.linearalgebrasolver;
 
+import javafx.scene.control.Alert;
+
 public class DeterminantCalculator {
     public static double calculateDeterminant(double[][] matrix) {
         // Check if the matrix is square
         int n = matrix.length;
-        if (matrix[0].length != n) {
-            throw new IllegalArgumentException("Matrix must be square");
-        }
 
 
         // Base case for 2x2 matrix

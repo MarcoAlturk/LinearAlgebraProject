@@ -91,7 +91,17 @@ public class BuilMatrixOperations {
         removeRowBtn.setOnAction(e -> removeRow(matrixGrid));
         addColBtn.setOnAction(e -> addColumn(matrixGrid));
         removeColBtn.setOnAction(e -> removeColumn(matrixGrid));
-        calculateDeterminantBtn.setOnAction(e -> calculateMatrixDeterminant(matrixGrid));
+        calculateDeterminantBtn.setOnAction(e -> {
+            double[][] matrixData = getMatrixData(matrixGrid);
+            if (matrixData[0].length != matrixData.length) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setContentText("The Matrix must be a square matrix!");
+                alert.showAndWait();
+            } else {
+                calculateMatrixDeterminant(matrixGrid);
+            }
+
+        });
 
         VBox matrixBox = new VBox(10);
         matrixBox.setAlignment(Pos.CENTER);
