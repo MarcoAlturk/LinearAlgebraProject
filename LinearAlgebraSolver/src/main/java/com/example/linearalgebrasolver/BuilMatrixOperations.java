@@ -248,6 +248,16 @@ public class BuilMatrixOperations {
         double[][] matrixData = getMatrixData(matrixGrid); // Extract matrix data
         double[][] inverse = InverseCalculator.calculateInverse(matrixData);
 
+        if (matrixData[0].length != matrixData.length) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("The Matrix must be a square matrix!");
+            alert.showAndWait();
+        } else if (DeterminantCalculator.calculateDeterminant(matrixData) == 0) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("The Matrix's determinant must be different than 0!");
+            alert.showAndWait();
+        }
+        else {
             StringBuilder result = new StringBuilder("Inverse Matrix:\n");
             for (double[] row : inverse) {
                 for (double value : row) {
@@ -264,6 +274,9 @@ public class BuilMatrixOperations {
             alert.setTitle("Matrix Inverse");
             alert.setHeaderText("The inverse of the matrix:");
             alert.showAndWait();
+        }
+
+
 
     }
 }
