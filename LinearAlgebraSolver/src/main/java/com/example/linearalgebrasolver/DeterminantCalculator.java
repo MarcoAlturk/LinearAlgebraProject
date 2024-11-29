@@ -4,10 +4,19 @@ public class DeterminantCalculator {
     public static double calculateDeterminant(double[][] matrix) {
         // Check if the matrix is square
         int n = matrix.length;
+
+
+
+        if (n == 0 || matrix[0].length == 0) {
+            throw new IllegalArgumentException("Matrix cannot be empty.");
+        }
         if (matrix[0].length != n) {
             throw new IllegalArgumentException("Matrix must be square");
         }
 
+        if (n == 1) {
+            return matrix[0][0];
+        }
 
         // Base case for 2x2 matrix
         if (n == 2) {
@@ -28,7 +37,7 @@ public class DeterminantCalculator {
 
 
     // Helper method to get the minor of a matrix by excluding a row and a column
-    private static double[][] getMinor(double[][] matrix, int row, int col) {
+    public static double[][] getMinor(double[][] matrix, int row, int col) {
         int n = matrix.length;
         double[][] minor = new double[n - 1][n - 1];
 

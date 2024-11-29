@@ -75,6 +75,8 @@ public class BuilMatrixOperations {
         removeColBtn.setStyle("-fx-font-family: Arial; -fx-font-weight: bolder");
         Button calculateDeterminantBtn = new Button("Calculate Determinant");
         calculateDeterminantBtn.setStyle("-fx-font-family: Arial; -fx-font-weight: bolder");
+        Button calculateInverseBtn = new Button("Calculate Inverse");
+        calculateInverseBtn.setStyle("-fx-font-family: Arial; -fx-font-weight: bolder");
 
         controlsRows.setAlignment(Pos.CENTER);
         controlsRows.getChildren().addAll(addRowBtn, removeRowBtn);
@@ -83,7 +85,9 @@ public class BuilMatrixOperations {
         controlsColumns.getChildren().addAll(addColBtn, removeColBtn);
 
         controls.getChildren().addAll(controlsRows, controlsColumns);
+
         controls.getChildren().add(calculateDeterminantBtn);
+        controls.getChildren().add(calculateInverseBtn);
 
 
         // Event handlers
@@ -92,6 +96,7 @@ public class BuilMatrixOperations {
         addColBtn.setOnAction(e -> addColumn(matrixGrid));
         removeColBtn.setOnAction(e -> removeColumn(matrixGrid));
         calculateDeterminantBtn.setOnAction(e -> calculateMatrixDeterminant(matrixGrid));
+        calculateInverseBtn.setOnAction(e -> calculateMatrixInverse(matrixGrid));
 
         VBox matrixBox = new VBox(10);
         matrixBox.setAlignment(Pos.CENTER);
@@ -229,4 +234,26 @@ public class BuilMatrixOperations {
         alert.showAndWait();
     }
 
+    private void calculateMatrixInverse(GridPane matrixGrid) {
+        double[][] matrixData = getMatrixData(matrixGrid); // Extract matrix data
+        double[][] inverse = InverseCalculator.calculateInverse(matrixData);
+
+            StringBuilder result = new StringBuilder("Inverse Matrix:\n");
+            for (double[] row : inverse) {
+                for (double value : row) {
+
+                    if (Math.abs(value) < 1e-10) {
+                        value = 0.0;
+                    }
+                    result.append(String.format("%8.2f", value)).append(" ");
+                }
+                result.append("\n");
+            }
+
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, result.toString());
+            alert.setTitle("Matrix Inverse");
+            alert.setHeaderText("The inverse of the matrix:");
+            alert.showAndWait();
+
+    }
 }
