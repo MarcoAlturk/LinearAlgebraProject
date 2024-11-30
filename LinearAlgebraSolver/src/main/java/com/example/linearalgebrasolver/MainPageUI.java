@@ -134,13 +134,44 @@ public class MainPageUI {
     public static TextField createNumericField(String prompt) {
         TextField field = new TextField();
         field.setPromptText(prompt);
+
         field.textProperty().addListener((obs, oldVal, newVal) -> {
-            if (!newVal.matches("\\d*")) { // Allow only numbers
-                field.setText(newVal.replaceAll("[^\\d]", ""));
+            try {
+                // Save the current caret position before making changes
+                int caretPosition = field.getCaretPosition();
+
+                // Clean up the input to allow digits and a single leading "-"
+                String newText = newVal.replaceAll("[^\\d-]", "");
+
+                // Ensure "-" is only at the beginning and there is only one "-"
+                if (newText.indexOf("-") > 0) {
+                    newText = newText.replaceAll("-", "");
+                }
+                if (newText.indexOf("-") != newText.lastIndexOf("-")) {
+                    newText = newText.replaceAll("-", "");
+                }
+
+                // Only update the text if it's different from the previous value
+                if (!newText.equals(field.getText())) {
+                    field.setText(newText);
+                }
+
+                // Safely update the caret position (do not let it go out of bounds)
+                field.positionCaret(Math.min(caretPosition, newText.length()));
+            } catch (Exception e) {
+                // If any error occurs, log the error and do nothing
+                System.err.println("Error updating text: " + e.getMessage());
             }
         });
+
         return field;
     }
+
+
+
+
+
+
 
     public static void matrixOperations(TabPane tabPane) {
         BuilMatrixOperations builMatrixOperations = new BuilMatrixOperations();
