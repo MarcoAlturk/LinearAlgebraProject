@@ -1,4 +1,4 @@
-package com.example.linearalgebrasolver;
+package com.example.linearalgebrasolver.OperationsMatrices;
 
 import javafx.scene.control.Alert;
 

@@ -1,6 +1,6 @@
-package com.example.linearalgebrasolver;
+package com.example.linearalgebrasolver.PolyMessh;
 
-import java.util.Arrays;
+import com.example.linearalgebrasolver.OperationsMatrices.DeterminantCalculator;
 
 public class InverseCalculator {
     public static double[][] calculateInverse(double[][] matrix) {

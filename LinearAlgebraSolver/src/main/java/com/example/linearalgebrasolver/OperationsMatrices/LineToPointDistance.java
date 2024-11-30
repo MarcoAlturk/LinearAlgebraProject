@@ -1,4 +1,4 @@
-package com.example.linearalgebrasolver;
+package com.example.linearalgebrasolver.OperationsMatrices;
 
 public class LineToPointDistance {
     public static double calculate(double[] linePoint, double[] lineDirection, double[] point) {

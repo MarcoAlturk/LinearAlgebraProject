@@ -1,4 +1,4 @@
-package com.example.linearalgebrasolver;
+package com.example.linearalgebrasolver.OperationsMatrices;
 
 public class PlaneToPointDistance {
     public static double calculate(double A, double B, double C, double D, double x, double y, double z) {

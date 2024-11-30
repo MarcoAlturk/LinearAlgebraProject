@@ -1,5 +1,7 @@
 package com.example.linearalgebrasolver;
 
+import com.example.linearalgebrasolver.OperationsMatrices.DeterminantCalculator;
+import com.example.linearalgebrasolver.PolyMessh.InverseCalculator;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -10,11 +12,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import org.ejml.simple.SimpleMatrix;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class BuilMatrixOperations {
     int matrixCount = 0; // To track created matrices (A, B, C, D)

@@ -6,4 +6,8 @@ module com.example.linearalgebrasolver {
 
     opens com.example.linearalgebrasolver to javafx.fxml;
     exports com.example.linearalgebrasolver;
+    exports com.example.linearalgebrasolver.OperationsMatrices;
+    opens com.example.linearalgebrasolver.OperationsMatrices to javafx.fxml;
+    exports com.example.linearalgebrasolver.PolyMessh;
+    opens com.example.linearalgebrasolver.PolyMessh to javafx.fxml;
 }
