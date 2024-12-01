@@ -47,12 +47,11 @@ public class Planes {
         // Calculate the angle in the 2D X-Y plane for the rotation
         double angle = Math.toDegrees(Math.atan2(ny, nx));
 
-        // Apply rotation to plane in 2D (rotate around Z-axis only)
+
         Rotate rotateZ = new Rotate(-angle, Rotate.Z_AXIS);
         Point3D arrowStart = new Point3D(plane.getTranslateX(), plane.getTranslateY(), plane.getTranslateZ());
         double angleX = Math.toDegrees(Math.atan2(nz, ny));
 
-        // Calculate the yaw (rotation around Y-axis)
         double angleY = Math.toDegrees(Math.atan2(nx, Math.sqrt(ny * ny + nz * nz)));
 
         Rotate rotateX = new Rotate(-angleX, Rotate.X_AXIS);

@@ -25,7 +25,7 @@ public class PlaneViewTest extends Application {
     @Override
     public void start(Stage primaryStage) {
         Planes planes = new Planes();
-        planes.setNormalVector(88,-5,1,-19);
+        planes.setNormalVector(5,-10,4,-19);
         System.out.println(planes.B);
         Arrow arrow = new Arrow(0.1, Color.PURPLE, 400);
 
