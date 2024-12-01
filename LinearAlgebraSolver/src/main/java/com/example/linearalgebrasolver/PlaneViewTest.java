@@ -1,11 +1,15 @@
 package com.example.linearalgebrasolver;
 
+import com.example.linearalgebrasolver.PolyMessh.Arrow;
 import com.example.linearalgebrasolver.View3DContainer.CartesianPlan;
 import com.example.linearalgebrasolver.View3DContainer.Planes;
 import javafx.application.Application;
+import javafx.geometry.Point3D;
 import javafx.scene.Group;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
+import javafx.scene.effect.Light;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Box;
 import javafx.scene.shape.MeshView;
 import javafx.scene.shape.Rectangle;
@@ -21,24 +25,24 @@ public class PlaneViewTest extends Application {
     @Override
     public void start(Stage primaryStage) {
         Planes planes = new Planes();
-        planes.setNormalVector(20,50,100,-1000);
+        planes.setNormalVector(88,-5,1,-19);
         System.out.println(planes.B);
-        Box planeMesh = planes.createPlaneMesh(5);
-       // MeshView planeMesh2 = planes.createPlaneMesh(-8,-4,11,-19,100);
-        System.out.println(planeMesh.getTranslateX() + " " + planeMesh.getTranslateY() + " " + planeMesh.getTranslateZ() + "Ok");
+        Arrow arrow = new Arrow(0.1, Color.PURPLE, 400);
+
+        Box planeMesh = planes.createPlaneMesh(400, arrow);
 
 
         CartesianPlan cartesianPlan = new CartesianPlan();
-        final Group grid = cartesianPlan.createGrid(250, 1);
+        final Group grid = cartesianPlan.createGrid(400, 1);
         final Group axes = cartesianPlan.getAxes(0.5);
-        Group plane = new Group( planeMesh, grid, axes);
+       Group plane = new Group( grid, axes,planeMesh );
+        //plane.getChildren().add(arrow);
 
 
 
         PerspectiveCamera camera = new PerspectiveCamera(true);
-        camera.setNearClip(0.1); // Ensure near clipping is very small
+        camera.setNearClip(0.001); // Ensure near clipping is very small
         camera.setFarClip(1000);
- // Move the camera back along the Z-axis
         camera.setTranslateZ(-100);
 
         Scene scene = new Scene(plane);

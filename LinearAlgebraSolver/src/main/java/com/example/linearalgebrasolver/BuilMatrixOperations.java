@@ -1,7 +1,7 @@
 package com.example.linearalgebrasolver;
 
 import com.example.linearalgebrasolver.OperationsMatrices.DeterminantCalculator;
-import com.example.linearalgebrasolver.PolyMessh.InverseCalculator;
+import com.example.linearalgebrasolver.OperationsMatrices.InverseCalculator;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.Node;

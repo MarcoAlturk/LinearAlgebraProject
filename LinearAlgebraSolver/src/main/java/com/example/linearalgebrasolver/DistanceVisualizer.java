@@ -1,5 +1,6 @@
 package com.example.linearalgebrasolver;
 
+import com.example.linearalgebrasolver.PolyMessh.Arrow;
 import com.example.linearalgebrasolver.View3DContainer.Planes;
 import javafx.geometry.Point3D;
 import javafx.scene.*;
@@ -24,8 +25,8 @@ public class DistanceVisualizer {
         SubScene subScene = setup3DScene(a, b, c, d, x, y, z, distance);
         Planes planes = new Planes();
         planes.setNormalVector(a, b, c, d);
-        Box pane = planes.createPlaneMesh(100);
-        Group groupPlane = new Group(pane);
+        Box pane = planes.createPlaneMesh(100, new Arrow(2, Color.RED, 250));
+        Group groupPlane =  new Group(pane);
         groupPlane.setTranslateZ(0);
         groupPlane.setTranslateX(0);
         groupPlane.setTranslateY(0);

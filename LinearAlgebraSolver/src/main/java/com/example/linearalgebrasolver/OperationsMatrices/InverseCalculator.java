@@ -1,4 +1,4 @@
-package com.example.linearalgebrasolver.PolyMessh;
+package com.example.linearalgebrasolver.OperationsMatrices;
 
 import com.example.linearalgebrasolver.OperationsMatrices.DeterminantCalculator;
 
