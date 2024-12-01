@@ -3,10 +3,7 @@ package com.example.linearalgebrasolver.View3DContainer;
 import javafx.geometry.Point3D;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
-import javafx.scene.shape.MeshView;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.TriangleMesh;
-import javafx.scene.shape.VertexFormat;
+import javafx.scene.shape.*;
 import javafx.scene.transform.Rotate;
 
 public class Planes {
@@ -16,24 +13,28 @@ public class Planes {
     public double A, B, C;
     private double D;
 
-    public Rectangle createPlaneMesh( double gridSize) {
+    public Box createPlaneMesh(double gridSize) {
         // Normalize the normal vector
         double magnitude = Math.sqrt(this.A * this.A + this.B * this.B + this.C * this.C);
+
         double nx = this.A / magnitude;
         double ny = this.B / magnitude;
         double nz = this.C / magnitude;
         double scaledD = this.D / magnitude;
         double offset = scaledD / gridSize;
 
-        Rectangle plane = new Rectangle(gridSize* 3 , gridSize * 4 );
-        plane.setFill(Color.RED);
+        Box plane = new Box(gridSize* 3 , gridSize * 4 , 0.0001);
+        plane.setMaterial(new javafx.scene.paint.PhongMaterial(Color.RED));
         plane.setOpacity(1);
 
-        plane.setTranslateX(nx * offset);
-        plane.setTranslateY(ny * offset);
-        plane.setTranslateZ(nz * offset);
+        plane.setTranslateX(nx *10*offset);
+        plane.setTranslateY(ny * 10*offset);
+        plane.setTranslateZ(nz * 10*offset);
+        System.out.println(plane.getTranslateX());
 
         Rotate rotate = createRotation(new Point3D(0,0,1), new Point3D(nx, ny, nz));
+
+
         plane.getTransforms().addAll(rotate);
         count++;
         return plane;
@@ -53,9 +54,11 @@ public class Planes {
     }
 
     public Rotate createRotation(Point3D zNormal, Point3D currentNormal){
-        Point3D axis  = zNormal.crossProduct(currentNormal); // convert into unit vector
+        Point3D axis  = zNormal.crossProduct(currentNormal).normalize();
         double angle = Math.acos(zNormal.dotProduct(currentNormal) / (zNormal.magnitude() * currentNormal.magnitude()));
+        System.out.println("Angle " + angle);
         return new Rotate(Math.toDegrees(angle), axis.getX(), axis.getY(), axis.getZ());
+
     }
 }
 

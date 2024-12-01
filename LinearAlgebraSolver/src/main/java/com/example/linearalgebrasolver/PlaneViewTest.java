@@ -1,10 +1,12 @@
 package com.example.linearalgebrasolver;
 
+import com.example.linearalgebrasolver.View3DContainer.CartesianPlan;
 import com.example.linearalgebrasolver.View3DContainer.Planes;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
+import javafx.scene.shape.Box;
 import javafx.scene.shape.MeshView;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Rotate;
@@ -19,15 +21,17 @@ public class PlaneViewTest extends Application {
     @Override
     public void start(Stage primaryStage) {
         Planes planes = new Planes();
-        planes.setNormalVector(-8,-4,11,-19);
+        planes.setNormalVector(-80,-466,1111,-19);
         System.out.println(planes.B);
-        Rectangle planeMesh = planes.createPlaneMesh(50);
+        Box planeMesh = planes.createPlaneMesh(10);
        // MeshView planeMesh2 = planes.createPlaneMesh(-8,-4,11,-19,100);
         System.out.println(planeMesh.getTranslateX() + " " + planeMesh.getTranslateY() + " " + planeMesh.getTranslateZ() + "Ok");
 
 
-
-        Group plane = new Group( planeMesh);
+        CartesianPlan cartesianPlan = new CartesianPlan();
+        final Group grid = cartesianPlan.createGrid(250, 1);
+        final Group axes = cartesianPlan.getAxes(0.5);
+        Group plane = new Group( planeMesh, grid, axes);
 
 
 
