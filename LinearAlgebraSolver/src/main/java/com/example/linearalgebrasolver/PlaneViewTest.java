@@ -21,9 +21,9 @@ public class PlaneViewTest extends Application {
     @Override
     public void start(Stage primaryStage) {
         Planes planes = new Planes();
-        planes.setNormalVector(-80,-466,1111,-19);
+        planes.setNormalVector(20,50,100,-1000);
         System.out.println(planes.B);
-        Box planeMesh = planes.createPlaneMesh(10);
+        Box planeMesh = planes.createPlaneMesh(5);
        // MeshView planeMesh2 = planes.createPlaneMesh(-8,-4,11,-19,100);
         System.out.println(planeMesh.getTranslateX() + " " + planeMesh.getTranslateY() + " " + planeMesh.getTranslateZ() + "Ok");
 

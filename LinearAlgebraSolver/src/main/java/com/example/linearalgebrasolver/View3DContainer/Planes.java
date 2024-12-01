@@ -27,9 +27,9 @@ public class Planes {
         plane.setMaterial(new javafx.scene.paint.PhongMaterial(Color.RED));
         plane.setOpacity(1);
 
-        plane.setTranslateX(nx *10*offset);
-        plane.setTranslateY(ny * 10*offset);
-        plane.setTranslateZ(nz * 10*offset);
+        plane.setTranslateX(nx *offset);
+        plane.setTranslateY(ny * offset);
+        plane.setTranslateZ(nz * offset);
         System.out.println(plane.getTranslateX());
 
         Rotate rotate = createRotation(new Point3D(0,0,1), new Point3D(nx, ny, nz));
@@ -56,7 +56,7 @@ public class Planes {
     public Rotate createRotation(Point3D zNormal, Point3D currentNormal){
         Point3D axis  = zNormal.crossProduct(currentNormal).normalize();
         double angle = Math.acos(zNormal.dotProduct(currentNormal) / (zNormal.magnitude() * currentNormal.magnitude()));
-        System.out.println("Angle " + angle);
+        System.out.println("Angle " + Math.toDegrees(angle));
         return new Rotate(Math.toDegrees(angle), axis.getX(), axis.getY(), axis.getZ());
 
     }
