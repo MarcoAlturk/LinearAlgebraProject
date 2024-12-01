@@ -1,6 +1,7 @@
 package com.example.linearalgebrasolver;
 
 import com.example.linearalgebrasolver.PolyMessh.Arrow;
+import com.example.linearalgebrasolver.PolyMessh.Cone;
 import com.example.linearalgebrasolver.View3DContainer.CartesianPlan;
 import com.example.linearalgebrasolver.View3DContainer.Planes;
 import javafx.application.Application;
@@ -13,6 +14,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Box;
 import javafx.scene.shape.MeshView;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Sphere;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 
@@ -25,17 +27,28 @@ public class PlaneViewTest extends Application {
     @Override
     public void start(Stage primaryStage) {
         Planes planes = new Planes();
-        planes.setNormalVector(88,-5,1,-19);
+        planes.setNormalVector(5,-10,4,-19);
         System.out.println(planes.B);
-        Arrow arrow = new Arrow(0.1, Color.PURPLE, 400);
+        Arrow arrow = new Arrow(0.9, Color.PURPLE, 100);
+
+        arrow.setLength(50);
+
 
         Box planeMesh = planes.createPlaneMesh(400, arrow);
+
+        System.out.println(arrow.shaft.getTranslateX() + "  shaft x " + arrow.shaft.getTranslateY() +"   shaft y " + arrow.shaft.getTranslateZ() + " shaft z ");
+        System.out.println(arrow.cone.getTranslateX() + "  cone x " + arrow.cone.getTranslateY() +"   cone y " + arrow.cone.getTranslateZ() + " cone z ");
+
+
+        double radius = 0.2;
+        System.out.println(arrow.cone.getTranslateX() + "  cone x " + arrow.cone.getTranslateY() +"   cone y " + arrow.cone.getTranslateZ() + " z");
+
 
 
         CartesianPlan cartesianPlan = new CartesianPlan();
         final Group grid = cartesianPlan.createGrid(400, 1);
         final Group axes = cartesianPlan.getAxes(0.5);
-       Group plane = new Group( grid, axes,planeMesh );
+       Group plane = new Group( grid, axes,planeMesh ,arrow);
         //plane.getChildren().add(arrow);
 
 
