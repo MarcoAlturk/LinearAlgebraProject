@@ -1,12 +1,11 @@
 package com.example.linearalgebrasolver;
 
+import com.example.linearalgebrasolver.View3DContainer.Planes;
 import javafx.geometry.Point3D;
 import javafx.scene.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
-import javafx.scene.shape.Box;
-import javafx.scene.shape.Cylinder;
-import javafx.scene.shape.Sphere;
+import javafx.scene.shape.*;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
 import javafx.stage.Stage;
@@ -23,7 +22,15 @@ public class DistanceVisualizer {
         // Create the stage and scene
         Stage stage = new Stage();
         SubScene subScene = setup3DScene(a, b, c, d, x, y, z, distance);
-        Group container = new Group(subScene);
+        Planes planes = new Planes();
+        planes.setNormalVector(a, b, c, d);
+        Rectangle pane = planes.createPlaneMesh(100);
+        Group groupPlane = new Group(pane);
+        groupPlane.setTranslateZ(0);
+        groupPlane.setTranslateX(0);
+        groupPlane.setTranslateY(0);
+
+        Group container = new Group(subScene, groupPlane);
         Scene scene = new Scene(container, 800, 600, true);
 
         // Add rotation controls
