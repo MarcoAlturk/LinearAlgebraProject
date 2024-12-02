@@ -58,7 +58,7 @@ public class PlaneViewTest extends Application {
         camera.setFarClip(1000);
         camera.setTranslateZ(-100);
 
-        Scene scene = new Scene(plane);
+        Scene scene = new Scene(plane, 700, 700);
 
         handleCameraControls(scene, camera);
         scene.setCamera(camera);
@@ -68,12 +68,18 @@ public class PlaneViewTest extends Application {
     private void handleCameraControls(Scene scene, PerspectiveCamera camera) {
         final double[] mouseOldX = {0};
         final double[] mouseOldY = {0};
-        final double[] cameraRotX = {0};
-        final double[] cameraRotY = {0};
+        final double[] angleX = {0};
+        final double[] angleY = {0};
 
-        Rotate rotateX = new Rotate(0, Rotate.X_AXIS);
-        Rotate rotateY = new Rotate(0, Rotate.Y_AXIS);
-        camera.getTransforms().addAll(rotateX, rotateY);
+        // A group to pivot the camera around the origin
+        Group cameraPivot = new Group();
+        cameraPivot.getChildren().add(camera);
+
+        // Initial camera position
+        camera.setTranslateZ(-300);
+
+        // Add the pivot to the root node
+        ((Group) scene.getRoot()).getChildren().add(cameraPivot);
 
         scene.setOnMousePressed(event -> {
             mouseOldX[0] = event.getSceneX();
@@ -86,23 +92,23 @@ public class PlaneViewTest extends Application {
             mouseOldX[0] = event.getSceneX();
             mouseOldY[0] = event.getSceneY();
 
-            cameraRotY[0] -= deltaX * 0.1;
-            cameraRotX[0] += deltaY * 0.1;
-            rotateY.setAngle(cameraRotY[0]);
-            rotateX.setAngle(cameraRotX[0]);
+            angleY[0] -= deltaX * 0.2; // Horizontal rotation sensitivity
+            angleX[0] += deltaY * 0.2; // Vertical rotation sensitivity
+
+            cameraPivot.setRotationAxis(Rotate.Y_AXIS);
+            cameraPivot.setRotate(angleY[0]);
+
+            Rotate rotateX = new Rotate(angleX[0], Rotate.X_AXIS);
+            cameraPivot.getTransforms().setAll(rotateX);
         });
 
-        scene.setOnKeyPressed(event -> {
-            switch (event.getCode()) {
-                case W -> camera.setTranslateZ(camera.getTranslateZ() + 10);
-                case S -> camera.setTranslateZ(camera.getTranslateZ() - 10);
-                case A -> camera.setTranslateX(camera.getTranslateX() - 10);
-                case D -> camera.setTranslateX(camera.getTranslateX() + 10);
-                case UP -> camera.setTranslateY(camera.getTranslateY() - 10);
-                case DOWN -> camera.setTranslateY(camera.getTranslateY() + 10);
-            }
+        scene.setOnScroll(event -> {
+            double zoomFactor = event.getDeltaY() * 0.1; // Adjust zoom speed as needed
+            camera.setTranslateZ(camera.getTranslateZ() + zoomFactor);
         });
-
     }
+
+
+
 }
 
