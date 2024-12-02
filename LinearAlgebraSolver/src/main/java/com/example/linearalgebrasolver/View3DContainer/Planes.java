@@ -82,7 +82,7 @@ public class Planes {
         this.A = aX;
         this.B = aY;
         this.C = aZ;
-        this.D = d;//
+        this.D = d;///
     }
 
     public Color color(){
