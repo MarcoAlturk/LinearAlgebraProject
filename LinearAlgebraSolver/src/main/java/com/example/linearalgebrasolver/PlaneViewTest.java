@@ -15,6 +15,9 @@ import javafx.scene.shape.Box;
 import javafx.scene.shape.MeshView;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Sphere;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontSmoothingType;
+import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 
@@ -28,7 +31,7 @@ public class PlaneViewTest extends Application {
     public void start(Stage primaryStage) {
         Planes planes = new Planes();
         planes.setNormalVector(5,-10,4,-19);
-        System.out.println(planes.B);
+//        System.out.println(planes.B);
         Arrow arrow = new Arrow(0.9, Color.PURPLE, 100);
 
         arrow.setLength(50);
@@ -51,7 +54,42 @@ public class PlaneViewTest extends Application {
        Group plane = new Group( grid, axes,planeMesh ,arrow);
         //plane.getChildren().add(arrow);
 
+        Sphere point = new Sphere(2); // Create a small sphere with radius 2
+        point.setTranslateX(50); // Set X position
+        point.setTranslateY(50); // Set Y position
+        point.setTranslateZ(50); // Set Z position
+        point.setMaterial(new javafx.scene.paint.PhongMaterial(Color.BLUE)); // Make the sphere red
+         // Add the sphere to the scene
 
+        Text pointCoordinates = new Text("Point: (50, 50, 50)");
+        pointCoordinates.setFont(Font.font(8)); // Set font size
+        pointCoordinates.setFill(Color.GREEN); // Set text color
+        pointCoordinates.setTranslateX(50); // Position the text near the point
+        pointCoordinates.setTranslateY(50);
+        pointCoordinates.setTranslateZ(50);
+
+        Text planeEquation = new Text("Plane Equation: 5x - 10y + 4z = -19");
+        planeEquation.setFont(Font.font(8)); // Set font size
+        planeEquation.setFill(Color.BLUE); // Set text color
+        planeEquation.setTranslateX(0); // Position the text near the plane
+        planeEquation.setTranslateY(0);
+        planeEquation.setTranslateZ(0);
+
+        double[] closestPointCoordinates = ClosestPointOnPlane.closestPointOnPlane(5, -10, 4, 19, 50, 50,50);
+        Sphere closestPoint = new Sphere(2);
+        closestPoint.setTranslateX(closestPointCoordinates[0]);
+        closestPoint.setTranslateY(closestPointCoordinates[1]);
+        closestPoint.setTranslateZ(closestPointCoordinates[2]);
+        closestPoint.setMaterial(new javafx.scene.paint.PhongMaterial(Color.GREEN));
+
+        Text closestPointCoordinatesText = new Text(String.format("(%2s,%2s,%2s)", closestPointCoordinates[0], closestPointCoordinates[1], closestPointCoordinates[2]));
+        closestPointCoordinatesText.setFont(Font.font(8)); // Set font size
+        closestPointCoordinatesText.setFill(Color.BLUE); // Set text color
+        closestPointCoordinatesText.setTranslateX(closestPointCoordinates[0]); // Position the text near the plane
+        closestPointCoordinatesText.setTranslateY(closestPointCoordinates[1]);
+        closestPointCoordinatesText.setTranslateZ(closestPointCoordinates[2]);
+
+        System.out.println("Closest point : " + closestPointCoordinates[0] + "," + closestPointCoordinates[1] + "," + closestPointCoordinates[2]);
 
         PerspectiveCamera camera = new PerspectiveCamera(true);
         camera.setNearClip(0.001); // Ensure near clipping is very small
@@ -59,7 +97,9 @@ public class PlaneViewTest extends Application {
         camera.setTranslateZ(-100);
 
         Scene scene = new Scene(plane, 700, 700);
-
+        ((Group) scene.getRoot()).getChildren().add(point);
+        ((Group) scene.getRoot()).getChildren().add(pointCoordinates);
+        ((Group) scene.getRoot()).getChildren().add(closestPoint);
         handleCameraControls(scene, camera);
         scene.setCamera(camera);
         primaryStage.setScene(scene);
@@ -107,6 +147,7 @@ public class PlaneViewTest extends Application {
             camera.setTranslateZ(camera.getTranslateZ() + zoomFactor);
         });
     }
+
 
 
 
