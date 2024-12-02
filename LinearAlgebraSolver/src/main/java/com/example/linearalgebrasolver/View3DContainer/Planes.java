@@ -30,7 +30,7 @@ public class Planes {
         this.setzNormal(new Point3D(0,0,1));
         this.setCurrentNormal(new Point3D(nx, ny, nz));
 
-        Box plane = new Box(gridSize / 5 , gridSize / 3, 0.001);
+        Box plane = new Box(gridSize / 2 , gridSize / 3, 0.001);
         plane.setMaterial(new javafx.scene.paint.PhongMaterial(Color.RED));
         plane.setOpacity(0.5);
 
