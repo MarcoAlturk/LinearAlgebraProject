@@ -44,18 +44,42 @@ public class Arrow extends Group {
         this.direction = direction;
     }
     public  Arrow(){}
+    public Arrow(Point3D start, Point3D direction, double length, double radius) {
+        this.start = start;
+        this.direction = direction;
+        this.length = length;
 
-    public Arrow(double radius, Color color, double gridSize) {
-        this();
-        shaft = new Cylinder(radius, length);
-        shaft.setRadius(0.8);
-        this.shaft.setMaterial(new PhongMaterial(Color.MEDIUMPURPLE));
+        // Configure the shaft (reuse the field)
+        this.shaft.setRadius(radius);
+        this.shaft.setHeight(length);
+        PhongMaterial material = new PhongMaterial(Color.RED);
+        this.shaft.setMaterial(material);
 
+        // Compute rotation for the shaft
+        Point3D normalizedDirection = direction.normalize();
+        Point3D up = new Point3D(0, 1, 0);
+        double angle = Math.toDegrees(Math.acos(normalizedDirection.dotProduct(up)));
+        Point3D rotationAxis = normalizedDirection.crossProduct(up);
 
-        this.cone = new Cone(radius / 100, radius * 2, radius * 8, 36, color);
+        if (!rotationAxis.equals(Point3D.ZERO)) {
+            this.shaft.getTransforms().add(new Rotate(angle, rotationAxis));
+        }
 
-        this.getChildren().addAll(shaft,cone);
+        // Configure the cone (reuse the field)
+        this.cone = new Cone(radius * 2, 0, radius * 4, 36, Color.BLACK); // Adjust size
+        if (!rotationAxis.equals(Point3D.ZERO)) {
+            this.cone.getTransforms().add(new Rotate(angle, rotationAxis));
+        }
+
+        Point3D conePosition = start.add(normalizedDirection.multiply(length));
+        this.cone.setTranslateX(conePosition.getX());
+        this.cone.setTranslateY(conePosition.getY());
+        this.cone.setTranslateZ(conePosition.getZ());
+
+        // Add the shaft and cone to the group
+        this.getChildren().addAll(this.shaft, this.cone);
     }
+
 
     public  void setRotation(){
         Point3D vector = this.direction.subtract(this.start);

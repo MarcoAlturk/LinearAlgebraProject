@@ -2,6 +2,7 @@ package com.example.linearalgebrasolver.View3DContainer;
 
 import com.example.linearalgebrasolver.PolyMessh.Arrow;
 import javafx.geometry.Point3D;
+import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.*;
@@ -30,7 +31,7 @@ public class Planes {
         this.setzNormal(new Point3D(0,0,1));
         this.setCurrentNormal(new Point3D(nx, ny, nz));
 
-        Box plane = new Box(gridSize / 5 , gridSize / 3, 0.001);
+        Box plane = new Box(gridSize , gridSize ,0.001);
         plane.setMaterial(new javafx.scene.paint.PhongMaterial(Color.RED));
         plane.setOpacity(0.5);
 
@@ -53,7 +54,6 @@ public class Planes {
         double angleX = Math.toDegrees(Math.atan2(nz, ny));
 
         double angleY = Math.toDegrees(Math.atan2(nx, Math.sqrt(ny * ny + nz * nz)));
-
         Rotate rotateX = new Rotate(-angleX, Rotate.X_AXIS);
         Rotate rotateY = new Rotate(-angleY, Rotate.Y_AXIS);
 
@@ -76,6 +76,8 @@ public class Planes {
         count++;
         return plane;
     }
+
+
 
 
     public void setNormalVector(double aX, double aY, double aZ , double d){
