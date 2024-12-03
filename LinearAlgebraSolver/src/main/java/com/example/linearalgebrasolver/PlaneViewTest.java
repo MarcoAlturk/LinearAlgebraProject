@@ -32,26 +32,22 @@ public class PlaneViewTest extends Application {
         Planes planes = new Planes();
         planes.setNormalVector(5,-10,4,-19);
 //        System.out.println(planes.B);
-        Arrow arrow = new Arrow(0.9, Color.PURPLE, 100);
+        Arrow arrow =  new Arrow();
 
         arrow.setLength(50);
 
 
-        Box planeMesh = planes.createPlaneMesh(400, arrow);
-
-        System.out.println(arrow.shaft.getTranslateX() + "  shaft x " + arrow.shaft.getTranslateY() +"   shaft y " + arrow.shaft.getTranslateZ() + " shaft z ");
-        System.out.println(arrow.cone.getTranslateX() + "  cone x " + arrow.cone.getTranslateY() +"   cone y " + arrow.cone.getTranslateZ() + " cone z ");
+        Group arrowAndPlane = planes.normalAndPlane(400);
 
 
-        double radius = 0.2;
-        System.out.println(arrow.cone.getTranslateX() + "  cone x " + arrow.cone.getTranslateY() +"   cone y " + arrow.cone.getTranslateZ() + " z");
+
 
 
 
         CartesianPlan cartesianPlan = new CartesianPlan();
         final Group grid = cartesianPlan.createGrid(400, 1);
         final Group axes = cartesianPlan.getAxes(0.5);
-       Group plane = new Group( grid, axes,planeMesh ,arrow);
+       Group plane = new Group( grid, axes,arrowAndPlane);
         //plane.getChildren().add(arrow);
 
         Sphere point = new Sphere(2); // Create a small sphere with radius 2
