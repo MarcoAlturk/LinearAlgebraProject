@@ -7,20 +7,15 @@ import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.geometry.Point3D;
-import javafx.scene.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.PhongMaterial;
-import javafx.scene.shape.*;
 import javafx.stage.Stage;
 
 public class MainPageUI {
 
     public static Scene mainScene() {
         TabPane tabPane = new TabPane();
-
+        tabPane.setMinHeight(400);
         matrixOperations(tabPane);
         pointsOptions(tabPane);
 
@@ -53,6 +48,10 @@ public class MainPageUI {
 
             if (selected.equals("Plane to Point Distance")) {
                 setupPlaneToPointUI(inputArea);
+            } if (selected.equals("Plane to Line Distance")) {
+                setupPlaneToLineUI(inputArea);
+            } if (selected.equals("Line to Point Distance")) {
+
             }
             // You can implement setup for other distance types here
         });
@@ -131,6 +130,93 @@ public class MainPageUI {
         inputArea.getChildren().add(grid);
     }
 
+    public static void setupPlaneToLineUI(VBox inputArea) {
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+
+        // Labels and TextFields for plane equation
+        Label labelPlane = new Label("Plane Equation (Ax + By + Cz + D = 0):");
+        TextField fieldA = createNumericField("A");
+        TextField fieldB = createNumericField("B");
+        TextField fieldC = createNumericField("C");
+        TextField fieldD = createNumericField("D");
+
+        fieldA.setAlignment(Pos.CENTER_RIGHT);
+        fieldB.setAlignment(Pos.CENTER_RIGHT);
+        fieldC.setAlignment(Pos.CENTER_RIGHT);
+        fieldD.setAlignment(Pos.CENTER_RIGHT);
+
+        HBox planeInputs = new HBox(5, fieldA, new Label("x +"), fieldB, new Label("y +"),
+                fieldC, new Label("z +"), fieldD, new Label("= 0"));
+        planeInputs.setAlignment(Pos.CENTER);
+
+        // Labels and TextFields for line points (x1, y1, z1) and (x2, y2, z2)
+        Label labelLine = new Label("Line Coordinates (Two points P1(x1, y1, z1) and P2(x2, y2, z2)):");
+        TextField fieldX1 = createNumericField("X1");
+        TextField fieldY1 = createNumericField("Y1");
+        TextField fieldZ1 = createNumericField("Z1");
+
+        TextField fieldX2 = createNumericField("X2");
+        TextField fieldY2 = createNumericField("Y2");
+        TextField fieldZ2 = createNumericField("Z2");
+
+        HBox lineInputs = new HBox(5, fieldX1, new Label("X1"), fieldY1, new Label("Y1"), fieldZ1, new Label("Z1"));
+        lineInputs.setAlignment(Pos.CENTER);
+        HBox lineInputs2 = new HBox(5, fieldX2, new Label("X2"), fieldY2, new Label("Y2"), fieldZ2, new Label("Z2"));
+        lineInputs2.setAlignment(Pos.CENTER);
+
+        // Button and output label
+        Button calculateButton = new Button("Calculate Distance");
+        Label resultLabel = new Label();
+
+        calculateButton.setOnAction(e -> {
+            // Parse the values from the input fields
+            double A = Integer.parseInt(fieldA.getText());
+            double B = Integer.parseInt(fieldB.getText());
+            double C = Integer.parseInt(fieldC.getText());
+            double D = Integer.parseInt(fieldD.getText());
+
+            double x1 = Integer.parseInt(fieldX1.getText());
+            double y1 = Integer.parseInt(fieldY1.getText());
+            double z1 = Integer.parseInt(fieldZ1.getText());
+
+            double x2 = Integer.parseInt(fieldX2.getText());
+            double y2 = Integer.parseInt(fieldY2.getText());
+            double z2 = Integer.parseInt(fieldZ2.getText());
+
+            // Calculate the direction vector of the line (P1 to P2)
+            double dx = x2 - x1;
+            double dy = y2 - y1;
+            double dz = z2 - z1;
+
+            // Calculate the normal vector of the plane (A, B, C)
+            double planeNormalMagnitude = Math.sqrt(A * A + B * B + C * C);
+
+            // Calculate the distance from the line to the plane
+            double numerator = Math.abs(A * x1 + B * y1 + C * z1 + D);
+            double denominator = Math.sqrt(dx * dx + dy * dy + dz * dz) * planeNormalMagnitude;
+            double distance = numerator / denominator;
+
+            DistanceVisualizer visualizer = new DistanceVisualizer();
+            Stage visualizerStage = visualizer.createVisualizer(A, B, C, D, x1, y1, z1, distance);
+            visualizerStage.show();
+
+            resultLabel.setText(String.format("Distance: %.2f", distance));
+        });
+
+        // Adding elements to the grid
+        grid.add(labelPlane, 0, 0);
+        grid.add(planeInputs, 0, 1);
+        grid.add(labelLine, 0, 2);
+        grid.add(lineInputs, 0, 3);
+        grid.add(lineInputs2, 0, 4);
+        grid.add(calculateButton, 0, 5);
+        grid.add(resultLabel, 0, 6);
+
+        inputArea.getChildren().add(grid);
+    }
+
     public static TextField createNumericField(String prompt) {
         TextField field = new TextField();
         field.setPromptText(prompt);
@@ -166,12 +252,6 @@ public class MainPageUI {
 
         return field;
     }
-
-
-
-
-
-
 
     public static void matrixOperations(TabPane tabPane) {
         BuilMatrixOperations builMatrixOperations = new BuilMatrixOperations();
