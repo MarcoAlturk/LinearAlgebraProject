@@ -12,7 +12,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.converter.IntegerStringConverter;
 import org.ejml.simple.SimpleMatrix;
-
 import java.io.IOException;
 import java.util.List;
 

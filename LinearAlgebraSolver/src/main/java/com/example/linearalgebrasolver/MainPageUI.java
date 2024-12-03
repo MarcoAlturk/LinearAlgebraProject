@@ -15,7 +15,10 @@ public class MainPageUI {
 
     public static Scene mainScene() {
         TabPane tabPane = new TabPane();
+        tabPane.getStylesheets().add("styles.css");
+
         tabPane.setMinHeight(400);
+        tabPane.setMinWidth(1250);
         matrixOperations(tabPane);
         pointsOptions(tabPane);
 
@@ -51,7 +54,7 @@ public class MainPageUI {
             } if (selected.equals("Plane to Line Distance")) {
                 setupPlaneToLineUI(inputArea);
             } if (selected.equals("Line to Point Distance")) {
-
+                setupLineToPointUI(inputArea);
             }
             // You can implement setup for other distance types here
         });
@@ -129,6 +132,95 @@ public class MainPageUI {
 
         inputArea.getChildren().add(grid);
     }
+
+    public static void setupLineToPointUI(VBox inputArea) {
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+
+        // Labels and TextFields for line points
+        Label labelLine = new Label("Line defined by two points:");
+        TextField fieldX1 = createNumericField("X1");
+        TextField fieldY1 = createNumericField("Y1");
+        TextField fieldZ1 = createNumericField("Z1");
+        TextField fieldX2 = createNumericField("X2");
+        TextField fieldY2 = createNumericField("Y2");
+        TextField fieldZ2 = createNumericField("Z2");
+
+        HBox lineInputs = new HBox(5,
+                new Label("P1 ("), fieldX1, new Label(","), fieldY1, new Label(","), fieldZ1, new Label("),"),
+                new Label("P2 ("), fieldX2, new Label(","), fieldY2, new Label(","), fieldZ2, new Label(")")
+        );
+        lineInputs.setAlignment(Pos.CENTER);
+
+        // Labels and TextFields for point coordinates
+        Label labelPoint = new Label("Point Coordinates:");
+        TextField fieldX = createNumericField("X");
+        TextField fieldY = createNumericField("Y");
+        TextField fieldZ = createNumericField("Z");
+
+        HBox pointInputs = new HBox(5, fieldX, new Label("X"), fieldY, new Label("Y"), fieldZ, new Label("Z"));
+        pointInputs.setAlignment(Pos.CENTER);
+
+        // Button and output label
+        Button calculateButton = new Button("Calculate Distance");
+        Label resultLabel = new Label();
+
+        calculateButton.setOnAction(e -> {
+            // Parse line point coordinates
+            double x1 = Double.parseDouble(fieldX1.getText());
+            double y1 = Double.parseDouble(fieldY1.getText());
+            double z1 = Double.parseDouble(fieldZ1.getText());
+            double x2 = Double.parseDouble(fieldX2.getText());
+            double y2 = Double.parseDouble(fieldY2.getText());
+            double z2 = Double.parseDouble(fieldZ2.getText());
+
+            // Parse point coordinates
+            double x = Double.parseDouble(fieldX.getText());
+            double y = Double.parseDouble(fieldY.getText());
+            double z = Double.parseDouble(fieldZ.getText());
+
+            // Calculate distance
+            double[] lineVector = {x2 - x1, y2 - y1, z2 - z1};
+            double[] pointVector = {x - x1, y - y1, z - z1};
+
+            // Cross product of lineVector and pointVector
+            double[] crossProduct = {
+                    lineVector[1] * pointVector[2] - lineVector[2] * pointVector[1],
+                    lineVector[2] * pointVector[0] - lineVector[0] * pointVector[2],
+                    lineVector[0] * pointVector[1] - lineVector[1] * pointVector[0]
+            };
+
+            double crossProductMagnitude = Math.sqrt(
+                    crossProduct[0] * crossProduct[0] +
+                            crossProduct[1] * crossProduct[1] +
+                            crossProduct[2] * crossProduct[2]
+            );
+
+            double lineMagnitude = Math.sqrt(
+                    lineVector[0] * lineVector[0] +
+                            lineVector[1] * lineVector[1] +
+                            lineVector[2] * lineVector[2]
+            );
+
+            double distance = crossProductMagnitude / lineMagnitude;
+
+            LineToPointVisualizer visualizer = new LineToPointVisualizer();
+            Stage visualizerStage = visualizer.createVisualizer(x1, y1, z1, x2, y2, z2, x,y,z, distance);
+            visualizerStage.show();
+            resultLabel.setText(String.format("Distance: %.2f", distance));
+        });
+
+        grid.add(labelLine, 0, 0);
+        grid.add(lineInputs, 0, 1);
+        grid.add(labelPoint, 0, 2);
+        grid.add(pointInputs, 0, 3);
+        grid.add(calculateButton, 0, 4);
+        grid.add(resultLabel, 0, 5);
+
+        inputArea.getChildren().add(grid);
+    }
+
 
     public static void setupPlaneToLineUI(VBox inputArea) {
         GridPane grid = new GridPane();

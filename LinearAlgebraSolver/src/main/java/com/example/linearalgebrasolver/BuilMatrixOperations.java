@@ -11,6 +11,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
 public class BuilMatrixOperations {
@@ -23,7 +24,7 @@ public class BuilMatrixOperations {
         layout.setAlignment(Pos.CENTER);
 
         Button createMatrixButton = new Button("Create New Matrix");
-        createMatrixButton.setStyle("-fx-background-color: #3C99DC; -fx-text-fill: black; -fx-font-weight: bolder");
+        createMatrixButton.setStyle("-fx-background-color: #3C99DC; -fx-text-fill: white; -fx-font-weight: bolder");
         createMatrixButton.setOnAction(e -> createNewMatrix(layout));
 
         layout.getChildren().add(createMatrixButton);
@@ -63,6 +64,7 @@ public class BuilMatrixOperations {
         HBox controlsRows = new HBox(2);
         HBox controlsColumns = new HBox(2);
         Button addRowBtn = new Button("+ Row");
+
         addRowBtn.setStyle("-fx-font-family: Arial; -fx-font-weight: bolder");
         Button removeRowBtn = new Button("- Row");
         removeRowBtn.setStyle("-fx-font-family: Arial; -fx-font-weight: bolder");
@@ -71,10 +73,11 @@ public class BuilMatrixOperations {
         Button removeColBtn = new Button("- Column");
         removeColBtn.setStyle("-fx-font-family: Arial; -fx-font-weight: bolder");
         Button calculateDeterminantBtn = new Button("Calculate Determinant");
+        calculateDeterminantBtn.setMaxWidth(Double.MAX_VALUE);
         calculateDeterminantBtn.setStyle("-fx-font-family: Arial; -fx-font-weight: bolder");
         Button calculateInverseBtn = new Button("Calculate Inverse");
         calculateInverseBtn.setStyle("-fx-font-family: Arial; -fx-font-weight: bolder");
-
+        calculateInverseBtn.setMaxWidth(Double.MAX_VALUE);
         controlsRows.setAlignment(Pos.CENTER);
         controlsRows.getChildren().addAll(addRowBtn, removeRowBtn);
 
