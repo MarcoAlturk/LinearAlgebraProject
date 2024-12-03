@@ -27,30 +27,22 @@ public class PlaneViewTest extends Application {
     @Override
     public void start(Stage primaryStage) {
         Planes planes = new Planes();
-        planes.setNormalVector(5,-10,4,19);
-        System.out.println(planes.B);
-        Arrow arrow = new Arrow(0.9, Color.PURPLE, 100);
+        planes.setNormalVector(101,-12,56,4);
 
-        arrow.setLength(50);
-
-
-        Box planeMesh = planes.createPlaneMesh(400, arrow);
-
-        System.out.println(arrow.shaft.getTranslateX() + "  shaft x " + arrow.shaft.getTranslateY() +"   shaft y " + arrow.shaft.getTranslateZ() + " shaft z ");
-        System.out.println(arrow.cone.getTranslateX() + "  cone x " + arrow.cone.getTranslateY() +"   cone y " + arrow.cone.getTranslateZ() + " cone z ");
-
-
-        double radius = 0.2;
-        System.out.println(arrow.cone.getTranslateX() + "  cone x " + arrow.cone.getTranslateY() +"   cone y " + arrow.cone.getTranslateZ() + " z");
-
-
-
+        Box box = planes.createPlaneMesh(50, new Arrow(1,Color.BLUE,10));
+        Sphere sphere = new Sphere(100);
+        //sphere.setTranslateX(0);
+        //sphere.setTranslateY(0);
+        //sphere.setTranslateZ(-0);
         CartesianPlan cartesianPlan = new CartesianPlan();
-        final Group grid = cartesianPlan.createGrid(400, 1);
-        final Group axes = cartesianPlan.getAxes(0.5);
-       Group plane = new Group( grid, axes,planeMesh ,arrow);
+        final Group grid = cartesianPlan.createGrid(150, 1);
+        final Group axes = cartesianPlan.getAxes(0.2);
+       Group plane = new Group( grid, axes, box);
+       plane.setTranslateZ(100);
         //plane.getChildren().add(arrow);
-
+        plane.setScaleX(0.5); // Scale down by 10x along the X-axis
+        plane.setScaleY(0.5); // Scale down by 10x along the Y-axis
+        plane.setScaleZ(0.5);
 
 
         PerspectiveCamera camera = new PerspectiveCamera(true);
@@ -59,54 +51,50 @@ public class PlaneViewTest extends Application {
         camera.setTranslateZ(-100);
 
         Scene scene = new Scene(plane, 700, 700);
+        handleGroupControls(plane);
 
-        handleCameraControls(scene, camera);
         scene.setCamera(camera);
+        camera.setTranslateZ(-10);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
-    private void handleCameraControls(Scene scene, PerspectiveCamera camera) {
+    private void handleGroupControls(Group group) {
         final double[] mouseOldX = {0};
         final double[] mouseOldY = {0};
         final double[] angleX = {0};
         final double[] angleY = {0};
 
-        // A group to pivot the camera around the origin
-        Group cameraPivot = new Group();
-        cameraPivot.getChildren().add(camera);
+        // Set initial rotation of the group
+        group.setRotationAxis(Rotate.Y_AXIS);
+        group.setRotate(0);
 
-        // Initial camera position
-        camera.setTranslateZ(-300);
-
-        // Add the pivot to the root node
-        ((Group) scene.getRoot()).getChildren().add(cameraPivot);
-
-        scene.setOnMousePressed(event -> {
+        group.setOnMousePressed(event -> {
             mouseOldX[0] = event.getSceneX();
             mouseOldY[0] = event.getSceneY();
         });
 
-        scene.setOnMouseDragged(event -> {
+        group.setOnMouseDragged(event -> {
             double deltaX = event.getSceneX() - mouseOldX[0];
             double deltaY = event.getSceneY() - mouseOldY[0];
             mouseOldX[0] = event.getSceneX();
             mouseOldY[0] = event.getSceneY();
 
+            // Adjust angles based on mouse drag
             angleY[0] -= deltaX * 0.2; // Horizontal rotation sensitivity
             angleX[0] += deltaY * 0.2; // Vertical rotation sensitivity
 
-            cameraPivot.setRotationAxis(Rotate.Y_AXIS);
-            cameraPivot.setRotate(angleY[0]);
-
+            // Update group rotation
             Rotate rotateX = new Rotate(angleX[0], Rotate.X_AXIS);
-            cameraPivot.getTransforms().setAll(rotateX);
+            Rotate rotateY = new Rotate(angleY[0], Rotate.Y_AXIS);
+            group.getTransforms().setAll(rotateY, rotateX);
         });
 
-        scene.setOnScroll(event -> {
+        group.setOnScroll(event -> {
             double zoomFactor = event.getDeltaY() * 0.1; // Adjust zoom speed as needed
-            camera.setTranslateZ(camera.getTranslateZ() + zoomFactor);
+            group.setTranslateZ(group.getTranslateZ() + zoomFactor);
         });
     }
+
 
 
 

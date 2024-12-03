@@ -6,6 +6,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.*;
 import javafx.scene.transform.Rotate;
+import javafx.scene.transform.Scale;
 import javafx.scene.transform.Translate;
 
 public class Planes {
@@ -18,64 +19,48 @@ public class Planes {
 
     public Box createPlaneMesh(double gridSize, Arrow arrow) {
 
-       double magnitude = Math.sqrt(this.A * this.A + this.B * this.B + this.C * this.C);
-        System.out.println(magnitude);
-
+        double magnitude = Math.sqrt(this.A * this.A + this.B * this.B + this.C * this.C);
         double nx = this.A / magnitude;
         double ny = this.B / magnitude;
         double nz = this.C / magnitude;
-        double scaledD = this.D / magnitude;
+        double scaledD = -this.D / magnitude;
         double offset = scaledD / gridSize;
-        System.out.println("Normal : " + nx + " " +  ny + " " + nz);
-        this.setzNormal(new Point3D(0,0,1));
+
+
+        this.setzNormal(new Point3D(0, 0, 1));
         this.setCurrentNormal(new Point3D(nx, ny, nz));
 
-        Box plane = new Box(gridSize / 2 , gridSize / 2, 0.001);
+        Box plane = new Box(gridSize, gridSize, 0.001);
         plane.setMaterial(new javafx.scene.paint.PhongMaterial(Color.RED));
-        plane.setOpacity(0.5);
+        plane.setOpacity(0.2);
+        plane.setTranslateX(nx * offset / 5);
+        plane.setTranslateY(ny * offset / 5);
+        plane.setTranslateZ(nz * offset / 5);
 
-        plane.setTranslateX(nx *offset);
-        plane.setTranslateY(ny * offset);
-        plane.setTranslateZ(nz * offset);
+        // Compute the dot product between the default normal (Z-axis) and the current normal
+        Point3D defaultNormal = new Point3D(0, 0, 1);
+        double dotProduct = defaultNormal.dotProduct(new Point3D(nx, ny, nz));
 
+        // Compute the angle between the two normal vectors
+        double angle = Math.acos(dotProduct); // Angle between Z-axis and the plane's normal
 
+        Point3D rotationAxis = defaultNormal.crossProduct(new Point3D(nx, ny, nz));
 
-        //Rotate rotate = createRotation();
-       // Rotate rotate = new Rotate(35, 23,1,3);
-       // Rotate rotateX = new Rotate(Math.toDegrees(Math.atan2(nz, ny)), Rotate.X_AXIS);
-       // Rotate rotateY = new Rotate(Math.toDegrees(Math.atan2(nx, nz)), Rotate.Y_AXIS);
-        // Calculate the angle in the 2D X-Y plane for the rotation
-        double angle = Math.toDegrees(Math.atan2(ny, nx));
+        // Normalize the axis of rotation
+        rotationAxis = rotationAxis.normalize();
 
+        Rotate rotate = new Rotate(Math.toDegrees(angle), rotationAxis);
+        plane.getTransforms().add(rotate);
 
-        Rotate rotateZ = new Rotate(-angle, Rotate.Z_AXIS);
         Point3D arrowStart = new Point3D(plane.getTranslateX(), plane.getTranslateY(), plane.getTranslateZ());
-        double angleX = Math.toDegrees(Math.atan2(nz, ny));
-
-        double angleY = Math.toDegrees(Math.atan2(nx, Math.sqrt(ny * ny + nz * nz)));
-
-        Rotate rotateX = new Rotate(-angleX, Rotate.X_AXIS);
-        Rotate rotateY = new Rotate(-angleY, Rotate.Y_AXIS);
-
         Point3D arrowDirection = this.getCurrentNormal();
-
         arrow.setDirection(arrowDirection);
         arrow.setStart(arrowStart);
-
-
-
-        //arrow.getTransforms().addAll(rotateX, rotateY, rotateZ);
-        arrow.setRotation(nx, ny, nz);
-        arrow.setPosition();
-        arrow.setRotation();
-
-
-
-        plane.getTransforms().addAll( rotateX, rotateY, rotateZ);
 
         count++;
         return plane;
     }
+
 
 
     public void setNormalVector(double aX, double aY, double aZ , double d){
