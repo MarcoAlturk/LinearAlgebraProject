@@ -24,7 +24,7 @@ public class DistanceVisualizerTest {
         SubScene subScene = setup3DScene(a, b, c, d, x, y, z, distance);
         Planes planes = new Planes();
         planes.setNormalVector(a, b, c, d);
-        Box pane = planes.createPlaneMesh(100);
+        Group pane = planes.createPlaneMesh(100);
         Group groupPlane =  new Group(pane);
         groupPlane.setTranslateZ(0);
         groupPlane.setTranslateX(0);

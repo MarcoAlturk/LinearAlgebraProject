@@ -23,6 +23,10 @@ public class PlaneViewTest extends Application {
         launch(args);
     }
 
+//    public static void startPlane(double A, double B, double C, double D, Points points, Points point2, Points points3, Points poin1, Points poin2) {
+//
+//    }
+
     @Override
     public void start(Stage primaryStage) {
         Planes planes = new Planes();
