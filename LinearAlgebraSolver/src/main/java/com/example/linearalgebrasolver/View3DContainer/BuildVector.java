@@ -78,11 +78,20 @@ public class BuildVector {
         )/10;
     }
 
+
     private void addTextLabels() {
 
         Text3D uText = new Text3D("û", Color.RED, 0, uArrow.getLength() + 0.2, 0,2.5);
         Text3D vText = new Text3D("v̂", Color.GREEN, 0, vArrow.getLength() + 0.2, 0,2.5);
         Text3D wText = new Text3D("ŵ", Color.BLUE, 0, wArrow.getLength() + 0.2, 0,3.5);
+        Rotate rotateTextU = new Rotate(180, Rotate.X_AXIS);
+        Rotate rotateTextV = new Rotate(180, Rotate.X_AXIS);
+        Rotate rotateTextW = new Rotate(180, Rotate.X_AXIS);
+
+        // Add the rotation to the text to ensure it's upright
+        uText.getTransforms().add(rotateTextU);
+        vText.getTransforms().add(rotateTextV);
+        wText.getTransforms().add(rotateTextW);
 
         // Add the text labels to the group containing the arrows
         uArrow.getChildren().add(uText);

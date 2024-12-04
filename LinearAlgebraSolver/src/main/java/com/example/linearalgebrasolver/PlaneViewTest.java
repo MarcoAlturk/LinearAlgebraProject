@@ -58,10 +58,12 @@ public class PlaneViewTest extends Application {
 
         Group lineDistance = line.createLineWithDottedCylindersAndLabel("50 m");
 
+        Points pointsOnLine = new Points(25, 25, 25,150);
+
                 CartesianPlan cartesianPlan = new CartesianPlan();
         final Group grid = cartesianPlan.createGrid(150, 1);
         final Group axes = cartesianPlan.getAxes(0.2);
-       Group plane = new Group( grid, axes, box, points.getPointSphere(), points2.getPointSphere(),lineDistance , points3.getPointSphere(),vectorsGroup);
+       Group plane = new Group( grid, axes, box, points.getPointSphere(), points2.getPointSphere(),lineDistance , points3.getPointSphere(),vectorsGroup, pointsOnLine.getPointSphere());
        plane.setTranslateZ(100);
         //plane.getChildren().add(arrow);
         plane.setScaleX(4); // Scale down by 10x along the X-axis
