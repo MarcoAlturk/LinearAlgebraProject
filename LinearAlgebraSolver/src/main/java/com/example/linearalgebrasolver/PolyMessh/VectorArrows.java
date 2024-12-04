@@ -6,7 +6,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
 
-public class VectorArrows extends Group {
+public class
+VectorArrows extends Group {
     private double length = 10;
     private Point3D start = new Point3D(0,0,0);
     private Point3D direction = new Point3D(0,0,0);
@@ -58,4 +59,5 @@ public class VectorArrows extends Group {
         setTranslateY(position.getY());
         setTranslateZ(position.getZ());
     }
+
 }

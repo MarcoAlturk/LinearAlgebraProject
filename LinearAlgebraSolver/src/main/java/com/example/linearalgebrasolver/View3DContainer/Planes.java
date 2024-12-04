@@ -8,7 +8,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.*;
 import javafx.scene.transform.Rotate;
+import javafx.scene.transform.Scale;
+import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
+
+import java.util.ArrayList;
 
 public class Planes {
     static int count = 0;
@@ -18,107 +22,95 @@ public class Planes {
     private double D;
     private Point3D zNormal, currentNormal;
 
-    Box plane;
-    VectorArrows arrow;
+    VectorArrows normalBox;
 
+    Group plane = new Group();
 
-    public Box createPlaneMesh(double gridSize) {
+    public Group createPlaneMesh(double gridSize) {
+        Color color = PlanesColorManager.getNextColor();
 
-       double magnitude = Math.sqrt(this.A * this.A + this.B * this.B + this.C * this.C);
-        System.out.println(magnitude);
-
+        double magnitude = Math.sqrt(this.A * this.A + this.B * this.B + this.C * this.C);
         double nx = this.A / magnitude;
         double ny = this.B / magnitude;
         double nz = this.C / magnitude;
-        double scaledD = this.D / magnitude;
+        double scaledD = -this.D / magnitude;
         double offset = scaledD / gridSize;
-        System.out.println("Normal : " + nx + " " +  ny + " " + nz);
-        this.setzNormal(new Point3D(0,0,1));
+
+
+        this.setzNormal(new Point3D(0, 0, 1));
         this.setCurrentNormal(new Point3D(nx, ny, nz));
 
-        plane = new Box(gridSize / 5 , gridSize / 3, 0.001);
-        plane.setMaterial(new javafx.scene.paint.PhongMaterial(Color.RED));
-        plane.setOpacity(0.5);
-
-        //plane.setTranslateX(nx *offset);
-        //plane.setTranslateY(ny * offset);
-        //plane.setTranslateZ(nz * offset);
-
-        arrow = new VectorArrows(100, 1, 1);
-
-        // Position the arrow at the center of the plane
-        arrow.setTranslateZ(-plane.getDepth() / 2 - arrow.shaft.getDepth() / 2);
-        //arrow.setTranslateY(-arrow.shaft.getHeight() / 2); // Position cone at the tip of the shaft
-        arrow.getTransforms().add(new Rotate(90, Rotate.X_AXIS));
-
-        double angle = Math.toDegrees(Math.atan2(ny, nx));
+        Box mainBox = new Box(gridSize, gridSize, 0.001); // A thin box as the plane
+        PhongMaterial boxMaterial = new PhongMaterial();
+        boxMaterial.setDiffuseColor(color);
+        mainBox.setMaterial(boxMaterial);
 
 
-        Rotate rotateZ = new Rotate(-angle, Rotate.Z_AXIS);
-       // Point3D arrowStart = new Point3D(plane.getTranslateX(), plane.getTranslateY(), plane.getTranslateZ());
-        double angleX = Math.toDegrees(Math.atan2(nz, ny));
-
-        double angleY = Math.toDegrees(Math.atan2(nx, Math.sqrt(ny * ny + nz * nz)));
-
-      //  Rotate rotateX = new Rotate(-angleX, Rotate.X_AXIS);
-       // Rotate rotateY = new Rotate(-angleY, Rotate.Y_AXIS);
-
-        //Point3D arrowDirection = this.getCurrentNormal();
-
-        //arrow.setDirection(arrowDirection);
-        //arrow.setStart(arrowStart);
+        normalBox = new VectorArrows(10, 10, 100); // Width, Height, Depth for the normal vector
 
 
 
-        //arrow.getTransforms().addAll(rotateX, rotateY, rotateZ);
-       // arrow.setRotation(nx, ny, nz);
-       // arrow.setPosition();
-        //arrow.setRotation();
+        normalBox.cone.setTranslateZ(-mainBox.getDepth() * 0.5/ 2 - normalBox.shaft.getDepth() / 2);
+
+        normalBox.cone.getTransforms().addAll(new Rotate(90, Rotate.X_AXIS));
+
+        normalBox.cone.setTranslateY(1);
+
+        normalBox.getTransforms().add(new Scale(0.18,0.1, 0.1));
+        normalBox.setTranslateZ((-mainBox.getDepth() / 2 - normalBox.shaft.getDepth() / 2) / (gridSize / 2));
+        normalBox.setTranslateX(-normalBox.getLength());
+        double xText = normalBox.cone.getTranslateX() * 0.18 - 20;
+        double yText =  normalBox.cone.getTranslateY() * 0.1;
+        double zText =  normalBox.cone.getTranslateZ() * 0.1;
 
 
-//
-       /// plane.getTransforms().addAll( rotateX, rotateY, rotateZ);
+
+
+        Text3D normalText = new Text3D("Normal: (" + A + ", " + B + ", " + C + ")", color, xText, yText, zText, 3);;
+
+        Rotate rotate1 = new Rotate(90, Rotate.Y_AXIS);
+        mainBox.getTransforms().add(rotate1);
+
+
+        normalBox.getTransforms().add(rotate1);
+        normalText.getTransforms().addAll(new Rotate(-60, 0,0,1), new Rotate(-10, 0,1,1) );
+        plane.getChildren().addAll(mainBox, normalBox, normalText);
+
+
+
+        plane.setTranslateX(nx * offset );
+        plane.setTranslateY(ny * offset );
+        plane.setTranslateZ(nz * offset );
+
+        // C dot product between the default normal (Z-axis) and the current normal which is the one given by the equation
+        Point3D defaultNormal = new Point3D(0, 0, 1);
+        double dotProduct = defaultNormal.dotProduct(new Point3D(nx, ny, nz));
+
+        double angle = Math.acos(dotProduct);
+
+        Point3D rotationAxis = defaultNormal.crossProduct(new Point3D(nx, ny, nz));
+
+        rotationAxis = rotationAxis.normalize();
+
+        Rotate rotate = new Rotate(Math.toDegrees(angle), rotationAxis);
+
+
+
+
+        plane.getTransforms().addAll(rotate);
+        normalText.getTransforms().addAll(rotate);
 
         count++;
         return plane;
     }
-    public Group normalAndPlane(double gridSize) {
-        double magnitude = Math.sqrt(this.A * this.A + this.B * this.B + this.C * this.C);
-        System.out.println(magnitude);
 
-        double nx = this.A / magnitude;
-        double ny = this.B / magnitude;
-        double nz = this.C / magnitude;
-        double scaledD = this.D / magnitude;
-        double offset = scaledD / gridSize;
-
-        plane = createPlaneMesh(gridSize);
-
-        Group group = new Group(plane, arrow);
-
-
-        group.setTranslateX(nx *offset);
-        group.setTranslateY(ny * offset);
-        group.setTranslateZ(nz * offset);
-
-        // Calculate the rotation angle to align the plane's normal
-        double angleX = Math.atan2(this.B, this.C);  // Rotation around the X-axis
-        double angleY = Math.atan2(this.A, this.C);  // Rotation around the Y-axis
-
-        // Apply the rotation to the entire group (plane + arrow)
-        Rotate rotateX = new Rotate(Math.toDegrees(angleX), Rotate.X_AXIS);
-        Rotate rotateY = new Rotate(Math.toDegrees(angleY), Rotate.Y_AXIS);
-        group.getTransforms().addAll(rotateX, rotateY);
-
-        return group;
-    }
 
 
     public void setNormalVector(double aX, double aY, double aZ , double d){
         this.A = aX;
         this.B = aY;
         this.C = aZ;
-        this.D = d;///
+        this.D = d;
     }
 
     public Color color(){
@@ -142,6 +134,25 @@ public class Planes {
 
     public Point3D getCurrentNormal() {
         return currentNormal;
+    }
+    public class PlanesColorManager {
+        private static final ArrayList<Color> colors = new ArrayList<>() {{
+            add(Color.DODGERBLUE);  // Default Dodger Blue
+            add(Color.LIGHTCORAL); // Light red
+            add(Color.LIGHTGREEN); // Light green
+            add(Color.LIGHTGOLDENRODYELLOW); // Light orange
+        }};
+        private static int colorIndex = 0; // Tracks the current color index
+
+        // Get the next color based on the count
+        public static Color getNextColor() {
+            Color nextColor = colors.get(colorIndex); // Fetch current color
+            colorIndex++; // Increment the index
+            if (colorIndex >= colors.size()) {
+                colorIndex = 0; // Reset if we exceed available colors
+            }
+            return nextColor;
+        }
     }
 }
 
