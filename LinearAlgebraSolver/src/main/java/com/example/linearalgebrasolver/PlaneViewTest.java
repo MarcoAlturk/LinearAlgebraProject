@@ -65,7 +65,7 @@ public class PlaneViewTest extends Application {
         final Group axes = cartesianPlan.getAxes(0.2);
        Group plane = new Group( grid, axes, box, points.getPointSphere(), points2.getPointSphere(),lineDistance , points3.getPointSphere(),vectorsGroup, pointsOnLine.getPointSphere());
        plane.setTranslateZ(100);
-        //plane.getChildren().add(arrow);
+
         plane.setScaleX(4); // Scale down by 10x along the X-axis
         plane.setScaleY(4); // Scale down by 10x along the Y-axis
         plane.setScaleZ(4);
