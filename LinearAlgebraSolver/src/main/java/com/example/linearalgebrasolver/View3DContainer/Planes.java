@@ -1,13 +1,18 @@
 package com.example.linearalgebrasolver.View3DContainer;
 
 import com.example.linearalgebrasolver.PolyMessh.Arrow;
+import com.example.linearalgebrasolver.PolyMessh.VectorArrows;
 import javafx.geometry.Point3D;
+import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.*;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
+import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
+
+import java.util.ArrayList;
 
 public class Planes {
     static int count = 0;
@@ -17,7 +22,12 @@ public class Planes {
     private double D;
     private Point3D zNormal, currentNormal;
 
-    public Box createPlaneMesh(double gridSize, Arrow arrow) {
+    VectorArrows normalBox;
+
+    Group plane = new Group();
+
+    public Group createPlaneMesh(double gridSize) {
+        Color color = PlanesColorManager.getNextColor();
 
         double magnitude = Math.sqrt(this.A * this.A + this.B * this.B + this.C * this.C);
         double nx = this.A / magnitude;
@@ -30,32 +40,65 @@ public class Planes {
         this.setzNormal(new Point3D(0, 0, 1));
         this.setCurrentNormal(new Point3D(nx, ny, nz));
 
-        Box plane = new Box(gridSize, gridSize, 0.001);
-        plane.setMaterial(new javafx.scene.paint.PhongMaterial(Color.RED));
-        plane.setOpacity(0.2);
-        plane.setTranslateX(nx * offset / 5);
-        plane.setTranslateY(ny * offset / 5);
-        plane.setTranslateZ(nz * offset / 5);
+        Box mainBox = new Box(gridSize, gridSize, 0.001); // A thin box as the plane
+        PhongMaterial boxMaterial = new PhongMaterial();
+        boxMaterial.setDiffuseColor(color);
+        mainBox.setMaterial(boxMaterial);
 
-        // Compute the dot product between the default normal (Z-axis) and the current normal
+
+        normalBox = new VectorArrows(10, 10, 100); // Width, Height, Depth for the normal vector
+
+
+
+        normalBox.cone.setTranslateZ(-mainBox.getDepth() * 0.5/ 2 - normalBox.shaft.getDepth() / 2);
+
+        normalBox.cone.getTransforms().addAll(new Rotate(90, Rotate.X_AXIS));
+
+        normalBox.cone.setTranslateY(1);
+
+        normalBox.getTransforms().add(new Scale(0.18,0.1, 0.1));
+        normalBox.setTranslateZ((-mainBox.getDepth() / 2 - normalBox.shaft.getDepth() / 2) / (gridSize / 2));
+        normalBox.setTranslateX(-normalBox.getLength());
+        double xText = normalBox.cone.getTranslateX() * 0.18 - 20;
+        double yText =  normalBox.cone.getTranslateY() * 0.1;
+        double zText =  normalBox.cone.getTranslateZ() * 0.1;
+
+
+
+
+        Text3D normalText = new Text3D("Normal: (" + A + ", " + B + ", " + C + ")", color, xText, yText, zText, 3);;
+
+        Rotate rotate1 = new Rotate(90, Rotate.Y_AXIS);
+        mainBox.getTransforms().add(rotate1);
+
+
+        normalBox.getTransforms().add(rotate1);
+        normalText.getTransforms().addAll(new Rotate(-60, 0,0,1), new Rotate(-10, 0,1,1) );
+        plane.getChildren().addAll(mainBox, normalBox, normalText);
+
+
+
+        plane.setTranslateX(nx * offset );
+        plane.setTranslateY(ny * offset );
+        plane.setTranslateZ(nz * offset );
+
+        // C dot product between the default normal (Z-axis) and the current normal which is the one given by the equation
         Point3D defaultNormal = new Point3D(0, 0, 1);
         double dotProduct = defaultNormal.dotProduct(new Point3D(nx, ny, nz));
 
-        // Compute the angle between the two normal vectors
-        double angle = Math.acos(dotProduct); // Angle between Z-axis and the plane's normal
+        double angle = Math.acos(dotProduct);
 
         Point3D rotationAxis = defaultNormal.crossProduct(new Point3D(nx, ny, nz));
 
-        // Normalize the axis of rotation
         rotationAxis = rotationAxis.normalize();
 
         Rotate rotate = new Rotate(Math.toDegrees(angle), rotationAxis);
-        plane.getTransforms().add(rotate);
 
-        Point3D arrowStart = new Point3D(plane.getTranslateX(), plane.getTranslateY(), plane.getTranslateZ());
-        Point3D arrowDirection = this.getCurrentNormal();
-        arrow.setDirection(arrowDirection);
-        arrow.setStart(arrowStart);
+
+
+
+        plane.getTransforms().addAll(rotate);
+        normalText.getTransforms().addAll(rotate);
 
         count++;
         return plane;
@@ -91,6 +134,25 @@ public class Planes {
 
     public Point3D getCurrentNormal() {
         return currentNormal;
+    }
+    public class PlanesColorManager {
+        private static final ArrayList<Color> colors = new ArrayList<>() {{
+            add(Color.DODGERBLUE);  // Default Dodger Blue
+            add(Color.LIGHTCORAL); // Light red
+            add(Color.LIGHTGREEN); // Light green
+            add(Color.LIGHTGOLDENRODYELLOW); // Light orange
+        }};
+        private static int colorIndex = 0; // Tracks the current color index
+
+        // Get the next color based on the count
+        public static Color getNextColor() {
+            Color nextColor = colors.get(colorIndex); // Fetch current color
+            colorIndex++; // Increment the index
+            if (colorIndex >= colors.size()) {
+                colorIndex = 0; // Reset if we exceed available colors
+            }
+            return nextColor;
+        }
     }
 }
 

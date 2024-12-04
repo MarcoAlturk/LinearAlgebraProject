@@ -2,8 +2,7 @@ package com.example.linearalgebrasolver;
 
 import com.example.linearalgebrasolver.PolyMessh.Arrow;
 import com.example.linearalgebrasolver.PolyMessh.Cone;
-import com.example.linearalgebrasolver.View3DContainer.CartesianPlan;
-import com.example.linearalgebrasolver.View3DContainer.Planes;
+import com.example.linearalgebrasolver.View3DContainer.*;
 import javafx.application.Application;
 import javafx.geometry.Point3D;
 import javafx.scene.Group;
@@ -27,34 +26,59 @@ public class PlaneViewTest extends Application {
     @Override
     public void start(Stage primaryStage) {
         Planes planes = new Planes();
-        planes.setNormalVector(101,-12,56,4);
+        planes.setNormalVector(3,4,2,-100);
 
-        Box box = planes.createPlaneMesh(50, new Arrow(1,Color.BLUE,10));
-        Sphere sphere = new Sphere(100);
-        //sphere.setTranslateX(0);
-        //sphere.setTranslateY(0);
-        //sphere.setTranslateZ(-0);
-        CartesianPlan cartesianPlan = new CartesianPlan();
+        Group box = planes.createPlaneMesh(50);
+
+
+
+        Points points = new Points(100,200,4,150);
+        Points points2 = new Points(1,1,-0.5,150);
+        Points points3 = new Points(122,11,-0.5,150);
+
+        Points point1 = new Points(0, 0, 0, 150);// Point at (0, 0, 0)
+        Points point2 = new Points(50, 50, 50, 150);     // Point at (50, 50, 50)
+
+
+        double gridSize = 150;
+
+        Points u = new Points(5, 3, 5, 0.0001); // Example 3D vector
+        Points v = new Points(12, 31, 41, 0.001);
+        BuildVector buildVector = new BuildVector(u, v ,gridSize);
+        Group vectorsGroup = buildVector.getVectorsGroup();
+
+
+
+
+
+
+        Lines line = new Lines(point1, point2);
+       // Group lineGroup = line.createLine();
+      //  Group vectorDandLine = line.createLineWithNormalVector();
+
+        Group lineDistance = line.createLineWithDottedCylindersAndLabel("50 m");
+
+                CartesianPlan cartesianPlan = new CartesianPlan();
         final Group grid = cartesianPlan.createGrid(150, 1);
         final Group axes = cartesianPlan.getAxes(0.2);
-       Group plane = new Group( grid, axes, box);
+       Group plane = new Group( grid, axes, box, points.getPointSphere(), points2.getPointSphere(),lineDistance , points3.getPointSphere(),vectorsGroup);
        plane.setTranslateZ(100);
         //plane.getChildren().add(arrow);
-        plane.setScaleX(0.5); // Scale down by 10x along the X-axis
-        plane.setScaleY(0.5); // Scale down by 10x along the Y-axis
-        plane.setScaleZ(0.5);
+        plane.setScaleX(4); // Scale down by 10x along the X-axis
+        plane.setScaleY(4); // Scale down by 10x along the Y-axis
+        plane.setScaleZ(4);
 
 
         PerspectiveCamera camera = new PerspectiveCamera(true);
         camera.setNearClip(0.001); // Ensure near clipping is very small
         camera.setFarClip(1000);
-        camera.setTranslateZ(-100);
+
 
         Scene scene = new Scene(plane, 700, 700);
         handleGroupControls(plane);
 
         scene.setCamera(camera);
-        camera.setTranslateZ(-10);
+        camera.setTranslateZ(-700);
         primaryStage.setScene(scene);
         primaryStage.show();
     }

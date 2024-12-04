@@ -20,12 +20,12 @@ public class DistanceVisualizer {
     private double anchorX, anchorY, anchorAngleX = 0, anchorAngleY = 0;
 
     public Stage createVisualizer(double a, double b, double c, double d, double x, double y, double z, double distance) {
-        // Create the stage and scene
+
         Stage stage = new Stage();
         SubScene subScene = setup3DScene(a, b, c, d, x, y, z, distance);
         Planes planes = new Planes();
         planes.setNormalVector(a, b, c, d);
-        Box pane = planes.createPlaneMesh(100, new Arrow(2, Color.RED, 250));
+        Group pane = planes.createPlaneMesh(100);
         Group groupPlane =  new Group(pane);
         groupPlane.setTranslateZ(0);
         groupPlane.setTranslateX(0);
@@ -34,7 +34,6 @@ public class DistanceVisualizer {
         Group container = new Group(subScene, groupPlane);
         Scene scene = new Scene(container, 800, 600, true);
 
-        // Add rotation controls
         addRotationControls(scene);
 
         stage.setTitle("Plane to Point Visualization");
