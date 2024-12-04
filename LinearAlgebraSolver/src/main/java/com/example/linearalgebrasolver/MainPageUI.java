@@ -21,8 +21,23 @@ public class MainPageUI {
         tabPane.setMinWidth(1250);
         matrixOperations(tabPane);
         pointsOptions(tabPane);
+        matrixCalculation(tabPane);
 
         return new Scene(tabPane);
+    }
+
+    public static void matrixCalculation(TabPane tabPane) {
+        BuilMatrixOperations builMatrixOperations = new BuilMatrixOperations();
+        Tab tabMatrixOperations = new Tab("Matrix Calculations");
+
+        HBox layoutWithCreateButton = builMatrixOperations.createMatrixCalculations();
+        layoutWithCreateButton.setAlignment(Pos.CENTER);
+
+        VBox vBoxCurrentRootForTabs = new VBox(layoutWithCreateButton);
+        tabMatrixOperations.setContent(vBoxCurrentRootForTabs);
+
+        tabMatrixOperations.setClosable(false);
+        tabPane.getTabs().add(tabMatrixOperations);
     }
 
     public static void pointsOptions(TabPane tabPane) {
@@ -344,6 +359,7 @@ public class MainPageUI {
 
         return field;
     }
+
 
     public static void matrixOperations(TabPane tabPane) {
         BuilMatrixOperations builMatrixOperations = new BuilMatrixOperations();
