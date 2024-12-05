@@ -38,7 +38,7 @@ public class Points  {
         // Update the position of the point based on the grid size
         pointSphere.setTranslateX(X * scaleId);
         pointSphere.setTranslateY(Y * scaleId);
-        pointSphere.setTranslateZ(Z * ( (1 -(0.001* gridSize * scaleId))));
+        pointSphere.setTranslateZ(Z * ( (1 -(0.5* gridSize * scaleId))));
 
         System.out.println(pointSphere.getTranslateZ());
 

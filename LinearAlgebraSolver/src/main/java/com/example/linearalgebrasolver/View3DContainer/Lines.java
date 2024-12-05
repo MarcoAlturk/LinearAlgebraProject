@@ -177,7 +177,7 @@ public class Lines {
                 (startPoint.getPointSphere().getTranslateZ() + endPoint.getPointSphere().getTranslateZ()) / 2
         );
 
-        Text3D label = new Text3D(labelText, Color.BLACK, midpoint.getX() + 5, midpoint.getY(), midpoint.getZ(), 3);
+        Text3D label = new Text3D(labelText + " u", Color.BLACK, midpoint.getX() + 5, midpoint.getY(), midpoint.getZ(), 3);
         group.getChildren().add(label);
 
         return group;
