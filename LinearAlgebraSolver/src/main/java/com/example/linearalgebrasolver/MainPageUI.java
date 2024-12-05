@@ -1,5 +1,6 @@
 package com.example.linearalgebrasolver;
 
+import com.example.linearalgebrasolver.View3DContainer.Points;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -380,4 +381,27 @@ public class MainPageUI {
 
         Build3DVisualization.build(tabPane);
     }
+
+    public static  void distancesSetVisualization(TabPane tabPane, String typeDistance){
+        tabPane.getSelectionModel().select(2);
+
+
+    }
+
+    public void PointToPlane(double A, double B, double C, double D,double x1, double x2, double x3){
+        Points pointsOnPlane = generatePointOnPlane(A,B,C ,D, x1,x2,x3);
+        Points points = new Points(x1, x2, x3, 150);
+    }
+
+    public Points generatePointOnPlane(double A, double B, double C, double D, double x1, double x2, double x3) {
+        double t = -(A * x1 + B * x2 + C * x3 + D) / (A * A + B * B + C * C);
+
+
+        double x = x1 + t * A;
+        double y = x2 + t * B;
+        double z = x3 + t * C;
+
+        return new Points(x, y, z, 150);
+    }
+
 }
