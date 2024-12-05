@@ -3,12 +3,15 @@ package com.example.linearalgebrasolver.View3DContainer;
 import com.example.linearalgebrasolver.PolyMessh.VectorArrows;
 import javafx.geometry.Point3D;
 import javafx.scene.Group;
+import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Cylinder;
 import javafx.scene.shape.Line;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
+
+import java.util.Stack;
 
 public class Lines {
     private Points startPoint;
@@ -183,8 +186,8 @@ public class Lines {
         return group;
     }
 
-
-
-
-
+    public String lineFromTo(){
+        return "From:(" + startPoint.getY()+","+ startPoint.getY() + "," + startPoint.getZ()+ ")" + " to(" + endPoint.getX() + ","
+                +endPoint.getZ() + "," +endPoint.getZ() +")";
+    }
 }

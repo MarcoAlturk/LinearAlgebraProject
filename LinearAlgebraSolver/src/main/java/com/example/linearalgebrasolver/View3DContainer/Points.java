@@ -88,4 +88,15 @@ public class Points  {
         return new Point3D(this.getPointsCoordinates().getX() / ratio1, this.getPointsCoordinates().getY() /ratio1 , this.getPointsCoordinates().getZ() / ratio2);
     }
 
+    public double getX() {
+        return X;
+    }
+
+    public double getY() {
+        return Y;
+    }
+
+    public double getZ() {
+        return Z;
+    }
 }

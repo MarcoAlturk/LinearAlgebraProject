@@ -430,7 +430,7 @@ public class MainPageUI {
         planes.setNormalVector(A, B, C, D);
 
         Lines linesDistance = new Lines(pointsOnPlane, points);
-        Group lineGroup = linesDistance.createLineWithDottedCylindersAndLabel(distance + " u");
+        Group lineGroup = linesDistance.createLineWithDottedCylindersAndLabel(distance);
 
         Group completGroup = new Group(lineGroup, planes.createPlaneMesh(50), points.getPointLabel());
         Build3DVisualization.visualizationGroup.getChildren().addAll(completGroup);
@@ -461,10 +461,8 @@ public class MainPageUI {
         Group completeGroup = new Group();
         completeGroup.getChildren().addAll(lines.createLineWithNormalVector(), pointsOnLine.getPointSphere(), pointsOnLine.getPointLabel(), points.getPointSphere(), points.getPointLabel(), linesDistance.createLineWithDottedCylindersAndLabel(distance));
 
-        String xString = String.format("%.2f",linesDistance.originalDirection.getX());
-        String yString =  String.format("%.2f",linesDistance.originalDirection.getY());
-        String zString =  String.format("%.2f",linesDistance.originalDirection.getZ());
-        String label = "Line: " + "(" + xString + "," + yString + ","+zString + ")|Points: " + points.getPointLabel().getTextTocheck();
+
+        String label = lines.lineFromTo() + "|Points: " + points.getPointLabel().getTextTocheck();
         Build3DVisualization.visualizationGroup.getChildren().add(completeGroup);
         Build3DVisualization.addElementToList(label, completeGroup, null);
 
@@ -512,7 +510,7 @@ public class MainPageUI {
         completeGroup.getChildren().addAll(lines.createLineWithNormalVector(),
                 linesDistance.createLineWithDottedCylindersAndLabel(distance),planes.createPlaneMesh(50), generatePointsThatLiesOnLine.getPointLabel(), generatePointsThatLiesOnLine.getPointSphere(), pointsOnPlane.getPointSphere()
         );
-        String label = "Line: " + lines.getDirection() + " Plane: " + A + "x "  + B + "y " + C + "z " + D;
+        String label =  lines.lineFromTo() + " Plane: " + A + "x "  + B + "y " + C + "z " + D;
         Build3DVisualization.visualizationGroup.getChildren().add(completeGroup);
         Build3DVisualization.addElementToList(label, completeGroup, null);
         tabPane.getSelectionModel().select(3);
