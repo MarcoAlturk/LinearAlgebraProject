@@ -19,6 +19,6 @@ public class Text3D extends Group {
 }
 
     public String getTextTocheck() {
-        return textTocheck;
+        return this.textTocheck;
     }
 }

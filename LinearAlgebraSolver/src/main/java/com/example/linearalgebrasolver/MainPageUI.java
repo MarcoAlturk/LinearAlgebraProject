@@ -461,7 +461,10 @@ public class MainPageUI {
         Group completeGroup = new Group();
         completeGroup.getChildren().addAll(lines.createLineWithNormalVector(), pointsOnLine.getPointSphere(), pointsOnLine.getPointLabel(), points.getPointSphere(), points.getPointLabel(), linesDistance.createLineWithDottedCylindersAndLabel(distance));
 
-        String label = "Line: " + lines.originalDirection + " " + points.getPointLabel().getTextTocheck() + " (" + x1 + "," + x2 + "," + x3 + ")";
+        String xString = String.format("%.2f",linesDistance.originalDirection.getX());
+        String yString =  String.format("%.2f",linesDistance.originalDirection.getY());
+        String zString =  String.format("%.2f",linesDistance.originalDirection.getZ());
+        String label = "Line: " + "(" + xString + "," + yString + ","+zString + ")|" + points.getPointLabel().getTextTocheck();
         Build3DVisualization.visualizationGroup.getChildren().add(completeGroup);
         Build3DVisualization.addElementToList(label, completeGroup, null);
 
