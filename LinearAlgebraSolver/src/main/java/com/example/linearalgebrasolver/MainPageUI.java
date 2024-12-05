@@ -22,6 +22,7 @@ public class MainPageUI {
         matrixOperations(tabPane);
         pointsOptions(tabPane);
         matrixCalculation(tabPane);
+        visualization(tabPane);
 
         return new Scene(tabPane);
     }
@@ -373,5 +374,10 @@ public class MainPageUI {
 
         tabMatrixOperations.setClosable(false);
         tabPane.getTabs().add(tabMatrixOperations);
+    }
+
+    public static void visualization(TabPane tabPane){
+
+        Build3DVisualization.build(tabPane);
     }
 }

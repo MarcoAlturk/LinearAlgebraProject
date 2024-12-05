@@ -4,6 +4,7 @@ import javafx.geometry.Point3D;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Sphere;
+import javafx.scene.text.Text;
 
 public class Points  {
     private double X, Y, Z;
@@ -11,6 +12,8 @@ public class Points  {
     private static final Color[] colors = {
             Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW, Color.PURPLE
     };
+    private static final char[] labels = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
+    private Text3D pointLabel;
     private Color pointColor;
     private Sphere pointSphere;
 
@@ -37,6 +40,16 @@ public class Points  {
         pointSphere.setTranslateY(Y * scaleId);
         pointSphere.setTranslateZ(Z * ( (1 -(0.001* gridSize * scaleId))));
 
+        char labelChar = labels[count % labels.length];
+        String labelText = labelChar + " (" + X + ", " + Y + ", " + Z + ")";
+        pointLabel = new Text3D(labelText, pointColor,0,0,0,2.5);
+
+        // Position the label relative to the point
+        pointLabel.setTranslateX(pointSphere.getTranslateX() + 0.5); // Slight offset for readability
+        pointLabel.setTranslateY(pointSphere.getTranslateY() - 0.5);
+        pointLabel.setTranslateZ(pointSphere.getTranslateZ());
+
+
         count++;
     }
 
@@ -52,5 +65,21 @@ public class Points  {
         this.getPointSphere().setTranslateX(this.getPointSphere().getTranslateX());
         this.getPointSphere().setTranslateY(this.getPointSphere().getTranslateY());
         this.getPointSphere().setTranslateZ(this.getPointSphere().getTranslateZ());
+
+        pointLabel.getTransforms().clear();
+        pointLabel.getTransforms().add(new javafx.scene.transform.Translate(
+                point3D.getX() + 0.5,
+                point3D.getY() - 0.5,
+                point3D.getZ()
+        ));
+    }
+
+    public Text3D getPointLabel() {
+        return pointLabel;
+    }
+    public Point3D getTrueCoordinates(){
+        double ratio1 = ( 1/50 );
+        double ratio2 =  (1 -(0.001));
+        return new Point3D(this.getPointsCoordinates().getX() / ratio1, this.getPointsCoordinates().getY() /ratio1 , this.getPointsCoordinates().getZ() / ratio2);
     }
 }

@@ -98,5 +98,17 @@ public class BuildVector {
         vArrow.getChildren().add(vText);
         wArrow.getChildren().add(wText);
     }
+
+    public Point3D getU() {
+        return u.getTrueCoordinates();
+    }
+
+    public Point3D getV() {
+        return v.getTrueCoordinates();
+    }
+
+    public Point3D getW() {
+        return w.getTrueCoordinates();
+    }
 }
 

@@ -31,8 +31,11 @@ public class PlaneViewTest extends Application {
     public void start(Stage primaryStage) {
         Planes planes = new Planes();
         planes.setNormalVector(3,4,2,-100);
+        Planes planes1 = new Planes();
+        planes1.setNormalVector(33,5,100,-10);
 
         Group box = planes.createPlaneMesh(50);
+        Group box2  = planes1.createPlaneMesh(50);
 
 
 
@@ -46,8 +49,8 @@ public class PlaneViewTest extends Application {
 
         double gridSize = 150;
 
-        Points u = new Points(5, 3, 5, 0.0001); // Example 3D vector
-        Points v = new Points(12, 31, 41, 0.001);
+        Points u = new Points(-58, -38, -5, 0.0001); // Example 3D vector
+        Points v = new Points(127, 31, 41, 0.001);
         BuildVector buildVector = new BuildVector(u, v ,gridSize);
         Group vectorsGroup = buildVector.getVectorsGroup();
 
@@ -64,10 +67,10 @@ public class PlaneViewTest extends Application {
 
         Points pointsOnLine = new Points(25, 25, 25,150);
 
-                CartesianPlan cartesianPlan = new CartesianPlan();
+        CartesianPlan cartesianPlan = new CartesianPlan();
         final Group grid = cartesianPlan.createGrid(150, 1);
         final Group axes = cartesianPlan.getAxes(0.2);
-       Group plane = new Group( grid, axes, box, points.getPointSphere(), points2.getPointSphere(),lineDistance , points3.getPointSphere(),vectorsGroup, pointsOnLine.getPointSphere());
+       Group plane = new Group( grid, axes, box, box2,points.getPointSphere(), points2.getPointSphere(),lineDistance , points3.getPointSphere(),vectorsGroup, pointsOnLine.getPointSphere());
        plane.setTranslateZ(100);
 
         plane.setScaleX(4); // Scale down by 10x along the X-axis
