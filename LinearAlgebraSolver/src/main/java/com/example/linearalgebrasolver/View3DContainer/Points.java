@@ -38,14 +38,16 @@ public class Points  {
         // Update the position of the point based on the grid size
         pointSphere.setTranslateX(X * scaleId);
         pointSphere.setTranslateY(Y * scaleId);
-        pointSphere.setTranslateZ(Z * ( (1 -(0.001* gridSize  * scaleId))));
+        pointSphere.setTranslateZ(Z * ( (1 -(0.001* gridSize * scaleId))));
+
+        System.out.println(pointSphere.getTranslateZ());
 
         char labelChar = labels[count % labels.length];
         String xFormat = String.format("%.2f", X);
         String yFormat = String.format("%.2f", Y);
         String zFormat = String.format("%.2f", Z);
         String labelText = labelChar + " (" + xFormat + ", " + yFormat + ", " + zFormat + ")";
-        pointLabel = new Text3D( labelText, pointColor,0,0,0,2.5);
+        pointLabel = new Text3D(labelText, pointColor,0,0,0,2.5);
 
         // Position the label relative to the point
         pointLabel.setTranslateX(pointSphere.getTranslateX() + 0.5); // Slight offset for readability

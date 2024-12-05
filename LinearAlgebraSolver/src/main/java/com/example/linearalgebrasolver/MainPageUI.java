@@ -121,7 +121,7 @@ public class MainPageUI {
 
         // Button and output label
         Button calculateButton = new Button("Calculate Distance");
-        Button visualizeButton = new Button("<<(Visualize>>)");
+        Button visualizeButton = new Button("Visualize");
         visualizeButton.setStyle(
                 "-fx-background-color: #4CAF50; " +
                         "-fx-text-fill: white; " +
@@ -198,7 +198,7 @@ public class MainPageUI {
 
         // Button and output label
         Button calculateButton = new Button("Calculate Distance");
-        Button visualizeButton = new Button("<<(Visualize>>)");
+        Button visualizeButton = new Button("Visualize");
         visualizeButton.setStyle(
                 "-fx-background-color: #4CAF50; " +
                         "-fx-text-fill: white; " +
@@ -306,7 +306,7 @@ public class MainPageUI {
 
         // Button and output label
         Button calculateButton = new Button("Calculate Distance");
-        Button visualizeButton = new Button("<<(Visualize>>)");
+        Button visualizeButton = new Button("Visualize");
         visualizeButton.setStyle(
                 "-fx-background-color: #4CAF50; " +
                         "-fx-text-fill: white; " +
@@ -464,7 +464,7 @@ public class MainPageUI {
         String xString = String.format("%.2f",linesDistance.originalDirection.getX());
         String yString =  String.format("%.2f",linesDistance.originalDirection.getY());
         String zString =  String.format("%.2f",linesDistance.originalDirection.getZ());
-        String label = "Line: " + "(" + xString + "," + yString + ","+zString + ")|" + points.getPointLabel().getTextTocheck();
+        String label = "Line: " + "(" + xString + "," + yString + ","+zString + ")|Points: " + points.getPointLabel().getTextTocheck();
         Build3DVisualization.visualizationGroup.getChildren().add(completeGroup);
         Build3DVisualization.addElementToList(label, completeGroup, null);
 
