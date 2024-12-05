@@ -317,7 +317,7 @@ public class Build3DVisualization {
         leftControlPanel.getChildren().add(activeInputSection);
     }
 
-    private static void addElementToList(String label, Node visualNode, Text3D labelNode) {
+    public static void addElementToList(String label, Node visualNode, Text3D labelNode) {
         HBox elementBox = new HBox(10);
         elementBox.setPadding(new Insets(5));
         elementBox.setStyle("-fx-background-color: #ffffff; -fx-border-color: #d0d0d0;");
