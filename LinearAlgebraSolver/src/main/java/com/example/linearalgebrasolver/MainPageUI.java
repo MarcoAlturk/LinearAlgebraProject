@@ -17,8 +17,6 @@ public class MainPageUI {
         TabPane tabPane = new TabPane();
         tabPane.getStylesheets().add("styles.css");
 
-        tabPane.setMinHeight(400);
-        tabPane.setMinWidth(1250);
         matrixOperations(tabPane);
         pointsOptions(tabPane);
         matrixCalculation(tabPane);

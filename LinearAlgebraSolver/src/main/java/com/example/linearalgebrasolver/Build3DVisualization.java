@@ -2,11 +2,13 @@ package com.example.linearalgebrasolver;
 
 import com.example.linearalgebrasolver.View3DContainer.*;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.SceneAntialiasing;
 import javafx.scene.SubScene;
 import javafx.scene.control.*;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -23,7 +25,6 @@ public class Build3DVisualization {
 
     public static BorderPane build(TabPane tabPane) {
         BorderPane root = new BorderPane();
-
 
         Tab visualization3D = new Tab("3D Visualization");
         tabPane.getTabs().add(visualization3D);
@@ -44,12 +45,14 @@ public class Build3DVisualization {
         leftControlPanel.setPadding(new Insets(10));
         leftControlPanel.setStyle("-fx-background-color: #f0f0f0; -fx-border-color: #d0d0d0;");
 
-
         Button addPlaneButton = new Button("Add Plane");
+        addPlaneButton.setMaxWidth(9999999);
         Button addPointButton = new Button("Add Point");
+        addPointButton.setMaxWidth(9999999);
         Button addLineButton = new Button("Add Line");
+        addLineButton.setMaxWidth(9999999);
         Button crossProductButton = new Button("Calculate Cross Product");
-
+        crossProductButton.setMaxWidth(9999999);
 
         addPlaneButton.setOnAction(e -> showInputSection("Plane"));
         addPointButton.setOnAction(e -> showInputSection("Point"));
@@ -57,7 +60,8 @@ public class Build3DVisualization {
         crossProductButton.setOnAction(e ->{showCrossProductInputSection();});
 
         leftControlPanel.getChildren().addAll(addPlaneButton, addPointButton, addLineButton, crossProductButton);
-
+        leftControlPanel.setPrefWidth(300); // Set preferred width
+        leftControlPanel.setMaxWidth(350);
         // Right List Panel to display added elements
         rightListPanel = new VBox(10);
         rightListPanel.setPadding(new Insets(10));
@@ -83,18 +87,28 @@ public class Build3DVisualization {
         activeInputSection.setStyle("-fx-background-color: #ffffff; -fx-border-color: #d0d0d0;");
 
         VBox inputs = new VBox(5);
-        Button closeButton = new Button("Close");
+        Button closeButton = new Button("X");
+        closeButton.setStyle("-fx-background-color: #ff0a12; -fx-font-weight: bold;"); // Set background color to orange
+        closeButton.setAlignment(Pos.BOTTOM_RIGHT);
         closeButton.setOnAction(e -> leftControlPanel.getChildren().remove(activeInputSection));
 
         if (type.equals("Point")) {
-            inputs.getChildren().add(new Label("Point Coordinates (x, y, z):"));
+            Label labelPoint = new Label("Plane Equation: aX + bY + cZ - d = 0");
+            labelPoint.setWrapText(true);
+            inputs.getChildren().add(labelPoint);
 
             TextField xField = new TextField();
             xField.setPromptText("x");
+            xField.setPrefWidth(60); // Set preferred width
+            xField.setMaxWidth(80);
             TextField yField = new TextField();
             yField.setPromptText("y");
+            yField.setPrefWidth(60); // Set preferred width
+            yField.setMaxWidth(80);
             TextField zField = new TextField();
             zField.setPromptText("z");
+            zField.setPrefWidth(60); // Set preferred width
+            zField.setMaxWidth(80);
 
             Button addButton = new Button("Add Point");
             addButton.setOnAction(e -> {
@@ -113,16 +127,27 @@ public class Build3DVisualization {
 
             inputs.getChildren().addAll(xField, yField, zField, addButton);
         } else if (type.equals("Plane")) {
-            inputs.getChildren().add(new Label("Plane Equation: aX + bY + cZ - d = 0"));
+
+            Label labelPlane = new Label("Plane Equation: aX + bY + cZ - d = 0");
+            labelPlane.setWrapText(true);
+            inputs.getChildren().add(labelPlane);
 
             TextField aField = new TextField();
             aField.setPromptText("a");
+            aField.setPrefWidth(60); // Set preferred width
+            aField.setMaxWidth(80);
             TextField bField = new TextField();
             bField.setPromptText("b");
+            bField.setPrefWidth(60); // Set preferred width
+            bField.setMaxWidth(80);
             TextField cField = new TextField();
             cField.setPromptText("c");
+            cField.setPrefWidth(60); // Set preferred width
+            cField.setMaxWidth(80);
             TextField dField = new TextField();
             dField.setPromptText("d");
+            dField.setPrefWidth(60); // Set preferred width
+            dField.setMaxWidth(80);
 
             Button addButton = new Button("Add Plane");
             addButton.setOnAction(e -> {
@@ -143,20 +168,34 @@ public class Build3DVisualization {
 
             inputs.getChildren().addAll(aField, bField, cField, dField, addButton);
         } else if (type.equals("Line")) {
-            inputs.getChildren().add(new Label("Line: Enter Two Points (x1, y1, z1) and (x2, y2, z2):"));
+            Label labelPoints = new Label("Line: Enter Two Points (x1, y1, z1) and (x2, y2, z2):");
+            labelPoints.setWrapText(true);
+            inputs.getChildren().add(labelPoints);
 
             TextField x1Field = new TextField();
             x1Field.setPromptText("x1");
+            x1Field.setPrefWidth(60); // Set preferred width
+            x1Field.setMaxWidth(80);
             TextField y1Field = new TextField();
             y1Field.setPromptText("y1");
+            y1Field.setPrefWidth(60); // Set preferred width
+            y1Field.setMaxWidth(80);
             TextField z1Field = new TextField();
             z1Field.setPromptText("z1");
+            z1Field.setPrefWidth(60); // Set preferred width
+            z1Field.setMaxWidth(80);
             TextField x2Field = new TextField();
             x2Field.setPromptText("x2");
+            x2Field.setPrefWidth(60); // Set preferred width
+            x2Field.setMaxWidth(80);
             TextField y2Field = new TextField();
+            y2Field.setPrefWidth(60); // Set preferred width
+            y2Field.setMaxWidth(80);
             y2Field.setPromptText("y2");
             TextField z2Field = new TextField();
             z2Field.setPromptText("z2");
+            z2Field.setPrefWidth(60); // Set preferred width
+            z2Field.setMaxWidth(80);
 
             Button addButton = new Button("Add Line");
             addButton.setOnAction(e -> {
@@ -209,28 +248,41 @@ public class Build3DVisualization {
         activeInputSection.setStyle("-fx-background-color: #ffffff; -fx-border-color: #d0d0d0;");
 
         VBox inputs = new VBox(5);
-        Button closeButton = new Button("Close");
+        Button closeButton = new Button("X");
+        closeButton.setStyle("-fx-background-color: #ff0a12; -fx-font-weight: bold;");
         closeButton.setOnAction(e -> leftControlPanel.getChildren().remove(activeInputSection));
 
         // Input for vector u
         inputs.getChildren().add(new Label("û([ux], [uy], [uz])"));
 
         TextField uxField = new TextField();
+        uxField.setPrefWidth(60);
+        uxField.setMaxWidth(80);
         uxField.setPromptText("ux");
         TextField uyField = new TextField();
         uyField.setPromptText("uy");
+        uyField.setPrefWidth(60);
+        uyField.setMaxWidth(80);
         TextField uzField = new TextField();
         uzField.setPromptText("uz");
+        uzField.setPrefWidth(60);
+        uzField.setMaxWidth(80);
 
         // Input for vector v
         inputs.getChildren().add(new Label(" X v̂([vx], [vy], [vz])"));
 
         TextField vxField = new TextField();
         vxField.setPromptText("vx");
+        vxField.setPrefWidth(60);
+        vxField.setMaxWidth(80);
         TextField vyField = new TextField();
         vyField.setPromptText("vy");
+        vyField.setPrefWidth(60);
+        vyField.setMaxWidth(80);
         TextField vzField = new TextField();
         vzField.setPromptText("vz");
+        vzField.setPrefWidth(60);
+        vzField.setMaxWidth(80);
 
         Button calculateButton = new Button("Calculate Cross Product");
         calculateButton.setOnAction(e -> {
@@ -271,7 +323,8 @@ public class Build3DVisualization {
         elementBox.setStyle("-fx-background-color: #ffffff; -fx-border-color: #d0d0d0;");
         Label elementLabel = new Label(label);
 
-        Button removeButton = new Button("Remove");
+        Button removeButton = new Button("X");
+        removeButton.setStyle("-fx-font-weight: bold; -fx-background-color: #ff0a12");
         removeButton.setOnAction(e -> {
 
             visualizationGroup.getChildren().remove(visualNode);
