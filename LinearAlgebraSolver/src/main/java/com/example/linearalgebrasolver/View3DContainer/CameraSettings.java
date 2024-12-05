@@ -20,15 +20,15 @@ public class CameraSettings {
 
         // Apply transformations to the cartesianPlane
         this.cartesianPlane.setTranslateZ(100);
-        this.cartesianPlane.setScaleX(4);
-        this.cartesianPlane.setScaleY(4);
-        this.cartesianPlane.setScaleZ(4);
+        this.cartesianPlane.setScaleX(4.5);
+        this.cartesianPlane.setScaleY(4.5);
+        this.cartesianPlane.setScaleZ(4.5);
 
         // Initialize and configure the camera
         this.camera = new PerspectiveCamera(true);
-        this.camera.setNearClip(0.001);
-        this.camera.setFarClip(1000);
-        this.camera.setTranslateZ(-700);
+        this.camera.setNearClip(0.000011);
+        this.camera.setFarClip(10000);
+        this.camera.setTranslateZ(-800);
     }
 
     public PerspectiveCamera getCamera() {

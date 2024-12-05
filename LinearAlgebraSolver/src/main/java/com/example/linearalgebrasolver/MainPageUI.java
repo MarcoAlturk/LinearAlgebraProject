@@ -1,10 +1,16 @@
 package com.example.linearalgebrasolver;
 
+import com.example.linearalgebrasolver.View3DContainer.Lines;
+import com.example.linearalgebrasolver.View3DContainer.Planes;
 import com.example.linearalgebrasolver.View3DContainer.Points;
+import com.example.linearalgebrasolver.View3DContainer.Text3D;
 import javafx.geometry.Insets;
+import javafx.geometry.Point3D;
 import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.effect.Light;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -56,33 +62,34 @@ public class MainPageUI {
         );
         distanceTypeCombo.setValue("Plane to Point Distance");
 
-        VBox inputArea = new VBox(10); // Dynamic area to add inputs
+        VBox inputArea = new VBox(10);
         inputArea.setPadding(new Insets(10));
 
-        // Set up listener for ComboBox selection
+
         distanceTypeCombo.setOnAction(e -> {
             String selected = distanceTypeCombo.getValue();
             inputArea.getChildren().clear(); // Clear existing inputs
 
             if (selected.equals("Plane to Point Distance")) {
-                setupPlaneToPointUI(inputArea);
-            } if (selected.equals("Plane to Line Distance")) {
-                setupPlaneToLineUI(inputArea);
-            } if (selected.equals("Line to Point Distance")) {
-                setupLineToPointUI(inputArea);
+                setupPlaneToPointUI(inputArea, tabPane);
             }
-            // You can implement setup for other distance types here
+            if (selected.equals("Plane to Line Distance")) {
+                setupPlaneToLineUI(inputArea, tabPane);
+            }
+            if (selected.equals("Line to Point Distance")) {
+                setupLineToPointUI(inputArea, tabPane);
+            }
         });
 
-        // Default setup
-        setupPlaneToPointUI(inputArea);
+
+        setupPlaneToPointUI(inputArea, tabPane);
 
         layout.getChildren().addAll(selectLabel, distanceTypeCombo, inputArea);
         distanceTab.setContent(layout);
         tabPane.getTabs().add(distanceTab);
     }
 
-    public static void setupPlaneToPointUI(VBox inputArea) {
+    public static void setupPlaneToPointUI(VBox inputArea, TabPane tabPane) {
         GridPane grid = new GridPane();
         grid.setHgap(10);
         grid.setVgap(10);
@@ -114,7 +121,18 @@ public class MainPageUI {
 
         // Button and output label
         Button calculateButton = new Button("Calculate Distance");
+        Button visualizeButton = new Button("<<(Visualize>>)");
+        visualizeButton.setStyle(
+                "-fx-background-color: #4CAF50; " +
+                        "-fx-text-fill: white; " +
+                        "-fx-font-size: 16px; " +
+                        "-fx-font-weight: bold; " +
+                        "-fx-padding: 10px 20px; " +
+                        "-fx-border-radius: 5px; " +
+                        "-fx-background-radius: 5px;"
+        );
         Label resultLabel = new Label();
+
 
         calculateButton.setOnAction(e -> {
             double A = Integer.parseInt(fieldA.getText());
@@ -130,12 +148,12 @@ public class MainPageUI {
             double denominator = Math.sqrt(A * A + B * B + C * C);
             double distance = numerator / denominator;
 
-            DistanceVisualizer visualizer = new DistanceVisualizer();
-            Stage visualizerStage = visualizer.createVisualizer(A, B, C, D, x, y, z, distance);
-            visualizerStage.show();
-
 
             resultLabel.setText(String.format("Distance: %.2f", distance));
+
+            visualizeButton.setOnAction(t -> {
+                PointToPlane(A, B, C, D, x, y, z, resultLabel.getText(), tabPane);
+            });
         });
 
         grid.add(labelPlane, 0, 0);
@@ -144,11 +162,12 @@ public class MainPageUI {
         grid.add(pointInputs, 0, 3);
         grid.add(calculateButton, 0, 4);
         grid.add(resultLabel, 0, 5);
+        grid.add(visualizeButton, 0, 6);
 
         inputArea.getChildren().add(grid);
     }
 
-    public static void setupLineToPointUI(VBox inputArea) {
+    public static void setupLineToPointUI(VBox inputArea, TabPane tabPane) {
         GridPane grid = new GridPane();
         grid.setHgap(10);
         grid.setVgap(10);
@@ -179,6 +198,17 @@ public class MainPageUI {
 
         // Button and output label
         Button calculateButton = new Button("Calculate Distance");
+        Button visualizeButton = new Button("<<(Visualize>>)");
+        visualizeButton.setStyle(
+                "-fx-background-color: #4CAF50; " +
+                        "-fx-text-fill: white; " +
+                        "-fx-font-size: 16px; " +
+                        "-fx-font-weight: bold; " +
+                        "-fx-padding: 10px 20px; " +
+                        "-fx-border-radius: 5px; " +
+                        "-fx-background-radius: 5px;"
+        );
+
         Label resultLabel = new Label();
 
         calculateButton.setOnAction(e -> {
@@ -220,10 +250,10 @@ public class MainPageUI {
 
             double distance = crossProductMagnitude / lineMagnitude;
 
-            LineToPointVisualizer visualizer = new LineToPointVisualizer();
-            Stage visualizerStage = visualizer.createVisualizer(x1, y1, z1, x2, y2, z2, x,y,z, distance);
-            visualizerStage.show();
             resultLabel.setText(String.format("Distance: %.2f", distance));
+            visualizeButton.setOnAction(t -> {
+                lineToPointDistance(x1, y1, z1, x2, y2, z2, x, y, z, resultLabel.getText(), tabPane);
+            });
         });
 
         grid.add(labelLine, 0, 0);
@@ -232,12 +262,13 @@ public class MainPageUI {
         grid.add(pointInputs, 0, 3);
         grid.add(calculateButton, 0, 4);
         grid.add(resultLabel, 0, 5);
+        grid.add(visualizeButton, 0, 6);
 
         inputArea.getChildren().add(grid);
     }
 
 
-    public static void setupPlaneToLineUI(VBox inputArea) {
+    public static void setupPlaneToLineUI(VBox inputArea, TabPane tabPane) {
         GridPane grid = new GridPane();
         grid.setHgap(10);
         grid.setVgap(10);
@@ -275,6 +306,16 @@ public class MainPageUI {
 
         // Button and output label
         Button calculateButton = new Button("Calculate Distance");
+        Button visualizeButton = new Button("<<(Visualize>>)");
+        visualizeButton.setStyle(
+                "-fx-background-color: #4CAF50; " +
+                        "-fx-text-fill: white; " +
+                        "-fx-font-size: 16px; " +
+                        "-fx-font-weight: bold; " +
+                        "-fx-padding: 10px 20px; " +
+                        "-fx-border-radius: 5px; " +
+                        "-fx-background-radius: 5px;"
+        );
         Label resultLabel = new Label();
 
         calculateButton.setOnAction(e -> {
@@ -304,12 +345,11 @@ public class MainPageUI {
             double numerator = Math.abs(A * x1 + B * y1 + C * z1 + D);
             double denominator = Math.sqrt(dx * dx + dy * dy + dz * dz) * planeNormalMagnitude;
             double distance = numerator / denominator;
-
-            DistanceVisualizer visualizer = new DistanceVisualizer();
-            Stage visualizerStage = visualizer.createVisualizer(A, B, C, D, x1, y1, z1, distance);
-            visualizerStage.show();
-
             resultLabel.setText(String.format("Distance: %.2f", distance));
+
+            visualizeButton.setOnAction(t-> {
+                lineToPLaneDistance(x1,y1,z1, x2,y2,z2,A,B,C,D,resultLabel.getText(),tabPane );
+            });
         });
 
         // Adding elements to the grid
@@ -320,6 +360,7 @@ public class MainPageUI {
         grid.add(lineInputs2, 0, 4);
         grid.add(calculateButton, 0, 5);
         grid.add(resultLabel, 0, 6);
+        grid.add(visualizeButton, 0, 7);
 
         inputArea.getChildren().add(grid);
     }
@@ -375,23 +416,30 @@ public class MainPageUI {
         tabPane.getTabs().add(tabMatrixOperations);
     }
 
-    public static void visualization(TabPane tabPane){
+    public static void visualization(TabPane tabPane) {
 
         Build3DVisualization.build(tabPane);
     }
 
-    public static  void distancesSetVisualization(TabPane tabPane, String typeDistance){
-        tabPane.getSelectionModel().select(2);
 
+    public static void PointToPlane(double A, double B, double C, double D, double x1, double x2, double x3, String distance, TabPane tabPane) {
 
-    }
-
-    public void PointToPlane(double A, double B, double C, double D,double x1, double x2, double x3){
-        Points pointsOnPlane = generatePointOnPlane(A,B,C ,D, x1,x2,x3);
+        Points pointsOnPlane = generatePointOnPlane(A, B, C, D, x1, x2, x3);
         Points points = new Points(x1, x2, x3, 150);
+        Planes planes = new Planes();
+        planes.setNormalVector(A, B, C, D);
+
+        Lines linesDistance = new Lines(pointsOnPlane, points);
+        Group lineGroup = linesDistance.createLineWithDottedCylindersAndLabel(distance + " u");
+
+        Group completGroup = new Group(lineGroup, planes.createPlaneMesh(50), points.getPointLabel());
+        Build3DVisualization.visualizationGroup.getChildren().addAll(completGroup);
+        String label = "Plane: " + A + "x" + B + "y" + C + "z" + D + "" + "Point: " + "(" + x1 + "," + x2 + "," + x3 + ")";
+        Build3DVisualization.addElementToList(label, completGroup, null);
+        tabPane.getSelectionModel().select(3);
     }
 
-    public Points generatePointOnPlane(double A, double B, double C, double D, double x1, double x2, double x3) {
+    public static Points generatePointOnPlane(double A, double B, double C, double D, double x1, double x2, double x3) {
         double t = -(A * x1 + B * x2 + C * x3 + D) / (A * A + B * B + C * C);
 
 
@@ -400,7 +448,136 @@ public class MainPageUI {
         double z = x3 + t * C;
 
         return new Points(x, y, z, 150);
-        //
+    }
+
+    public static void lineToPointDistance(double startX1, double startX2, double startX3, double endX1, double endX2, double endx3, double x1, double x2, double x3, String distance, TabPane tabPane) {
+        Points startLine = new Points(startX1, startX2, startX3, 150);
+        Points endLine = new Points(endX1, endX2, endx3, 150);
+        Points pointsOnLine = generatePointOnLine(startX1, startX2, startX3, endX1, endX2, endx3, x1, x2, x3);
+        Points points = new Points(x1, x2, x3, 150);
+        Lines lines = new Lines(startLine, endLine);
+        Lines linesDistance = new Lines(points, pointsOnLine);
+
+        Group completeGroup = new Group();
+        completeGroup.getChildren().addAll(lines.createLineWithNormalVector(), pointsOnLine.getPointSphere(), pointsOnLine.getPointLabel(), points.getPointSphere(), points.getPointLabel(), linesDistance.createLineWithDottedCylindersAndLabel(distance));
+
+        String label = "Line: " + lines.originalDirection + " " + points.getPointLabel().getTextTocheck() + " (" + x1 + "," + x2 + "," + x3 + ")";
+        Build3DVisualization.visualizationGroup.getChildren().add(completeGroup);
+        Build3DVisualization.addElementToList(label, completeGroup, null);
+
+        tabPane.getSelectionModel().select(3);
+
+    }
+
+    public static Points generatePointOnLine(double startX1, double startX2, double startX3,
+                                             double endX1, double endX2, double endX3,
+                                             double x1, double x2, double x3) {
+        double dirX = endX1 - startX1;
+        double dirY = endX2 - startX2;
+        double dirZ = endX3 - startX3;
+
+
+        double vecToPointX = x1 - startX1;
+        double vecToPointY = x2 - startX2;
+        double vecToPointZ = x3 - startX3;
+
+
+        double tNumerator = dirX * vecToPointX + dirY * vecToPointY + dirZ * vecToPointZ;
+        double tDenominator = dirX * dirX + dirY * dirY + dirZ * dirZ;
+        double t = tNumerator / tDenominator;
+
+
+        double x = startX1 + t * dirX;
+        double y = startX2 + t * dirY;
+        double z = startX3 + t * dirZ;
+
+        return new Points(x, y, z, 150);
+
+    }
+    static double xLine = 0,yLine = 0,zLine = 0;
+    public static void lineToPLaneDistance(double startX1, double startX2, double startX3,
+                                           double endX1, double endX2, double endX3, double A, double B, double C, double D, String distance, TabPane tabPane) {
+        Points pointsOnPlane = generatePointThatLiesOnThePlane(A,B,C,D);
+        Points generatePointsThatLiesOnLine = generatePointOnLinePerpendicularPointOnPlane(startX1, startX2, startX3, endX1, endX2, endX3,xLine, yLine,zLine);
+        Points pointsStart = new Points(startX1, startX2, startX3, 150);
+        Points pointsEnd = new Points(endX1, endX2, endX3, 150);
+        Lines lines = new Lines(pointsStart, pointsEnd);
+        Lines linesDistance  = new Lines(pointsOnPlane, generatePointsThatLiesOnLine);
+        Planes planes = new Planes();
+        planes.setNormalVector(A,B,C,D);
+        Group completeGroup = new Group();
+        completeGroup.getChildren().addAll(lines.createLineWithNormalVector(),
+                linesDistance.createLineWithDottedCylindersAndLabel(distance),planes.createPlaneMesh(50), generatePointsThatLiesOnLine.getPointLabel(), generatePointsThatLiesOnLine.getPointSphere(), pointsOnPlane.getPointSphere()
+        );
+        String label = "Line: " + lines.getDirection() + " Plane: " + A + "x "  + B + "y " + C + "z " + D;
+        Build3DVisualization.visualizationGroup.getChildren().add(completeGroup);
+        Build3DVisualization.addElementToList(label, completeGroup, null);
+        tabPane.getSelectionModel().select(3);
+    }
+
+    public static Points generatePointOnLinePerpendicularPointOnPlane(double startX1, double startX2, double startX3,
+                                                                      double endX1, double endX2, double endX3, double x1, double x2, double x3) { // Direction vector of the line
+        double dirX = endX1 - startX1;
+        double dirY = endX2 - startX2;
+        double dirZ = endX3 - startX3;
+
+        // Vector from line start to the given plane point
+        double vecToPointX = x1 - startX1;
+        double vecToPointY = x2 - startX2;
+        double vecToPointZ = x3 - startX3;
+
+        // Calculate the projection scalar t
+        double tNumerator = dirX * vecToPointX + dirY * vecToPointY + dirZ * vecToPointZ;
+        double tDenominator = dirX * dirX + dirY * dirY + dirZ * dirZ;
+        double t = tNumerator / tDenominator;
+
+        // Calculate the closest point on the line to the given point
+        double closestX = startX1 + t * dirX;
+        double closestY = startX2 + t * dirY;
+        double closestZ = startX3 + t * dirZ;
+
+        return new Points(closestX, closestY, closestZ, 150);
+    }
+
+
+    public static Points generatePointThatLiesOnThePlane(double A, double B, double C, double D){
+
+        double x, y, z;
+
+
+        if (C != 0) {
+            x = Math.random() * 10 - 5;
+            y = Math.random() * 10 - 5;
+
+            z = -(A * x + B * y + D) / C;
+            xLine = x;
+            yLine = y;
+            zLine = z;
+        } else if (B != 0) {
+            x = Math.random() * 10 - 5;
+            z = Math.random() * 10 - 5;
+            xLine = x;
+            zLine = z;
+            y = -(A * x + C * z + D) / B;
+            yLine = y;
+        } else if (A != 0) {
+            y = Math.random() * 10 - 5;
+            z = Math.random() * 10 - 5;
+
+
+            x = -(B * y + C * z + D) / A;
+            xLine = x;
+            yLine = y;
+            zLine = z;
+        } else {
+
+            throw new IllegalArgumentException("Invalid plane equation: A, B, and C cannot all be zero.");
+        }
+
+        return new Points(x, y, z, 150);
+
     }
 
 }
+
+

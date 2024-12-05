@@ -38,7 +38,7 @@ public class Points  {
         // Update the position of the point based on the grid size
         pointSphere.setTranslateX(X * scaleId);
         pointSphere.setTranslateY(Y * scaleId);
-        pointSphere.setTranslateZ(Z * ( (1 -(0.001* gridSize * scaleId))));
+        pointSphere.setTranslateZ(Z * ( (1 -(0.001* gridSize ))));
 
         char labelChar = labels[count % labels.length];
         String labelText = labelChar + " (" + X + ", " + Y + ", " + Z + ")";
@@ -82,4 +82,5 @@ public class Points  {
         double ratio2 =  (1 -(0.001));
         return new Point3D(this.getPointsCoordinates().getX() / ratio1, this.getPointsCoordinates().getY() /ratio1 , this.getPointsCoordinates().getZ() / ratio2);
     }
+
 }

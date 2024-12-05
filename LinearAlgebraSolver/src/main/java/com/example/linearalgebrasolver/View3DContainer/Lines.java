@@ -14,7 +14,7 @@ public class Lines {
     private Points startPoint;
     private Points endPoint;
     private Point3D direction;
-    private Point3D originalDirection;
+    public Point3D originalDirection;
 
     public Lines(Points startPoint, Points endPoint) {
         this.startPoint = startPoint;
