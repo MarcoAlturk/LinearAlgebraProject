@@ -319,7 +319,7 @@ public class MainPageUI {
         Label resultLabel = new Label();
 
         calculateButton.setOnAction(e -> {
-            // Parse the values from the input fields
+
             double A = Integer.parseInt(fieldA.getText());
             double B = Integer.parseInt(fieldB.getText());
             double C = Integer.parseInt(fieldC.getText());
