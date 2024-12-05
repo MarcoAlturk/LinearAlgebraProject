@@ -14,6 +14,7 @@ public class GuiTestParts extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+        primaryStage.setFullScreen(true);
         primaryStage.setScene(MainPageUI.mainScene());
         primaryStage.setTitle("Linear Algebra Calculator");
         primaryStage.show();
